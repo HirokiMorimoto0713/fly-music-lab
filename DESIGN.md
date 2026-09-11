@@ -1,0 +1,31 @@
+---
+colors:
+  paper: '#f3f0e7'
+  surface: '#fbfaf5'
+  ink: '#30362e'
+  muted: '#6e7469'
+  line: '#d7d9ca'
+  accent: '#b84326'
+  accent_ink: '#fff8ed'
+  anatomy: '#25342f'
+typography:
+  display: Noto Serif JP
+  body: Noto Sans JP
+  data: DM Mono
+spacing: [7, 12, 18, 24, 30, 48, 60]
+radius: [4, 5, 8]
+motion:
+  interaction_ms: 160
+  reduced_motion: respect
+breakpoints: [700, 1050, 1500]
+---
+
+# 小さな脳の音楽室
+
+紙の上の実験ノートと楽器を合わせた落ち着いた画面。生成音楽の派手さより、何を操作し、何が起きたかを見渡せることを優先する。実装上のトークンは `src/style.css`。
+
+上段で生き物と音を並べ、中央で楽器の設定、下段で配線・保存・対照実験・説明を読む。背景は暖かい紙色、文字は緑寄りの墨色。橙色は開始、神経の活動、音符に使用する。神経図だけを暗い面にして観察対象を際立たせる。
+
+身体は独自の俯瞰イラスト。浮遊する装飾や無関係な自動アニメーションを加えない。歩行と羽は計算した発火率から描く。身体の動きを減らした場合も、発火数と音を観察できる。
+
+操作にはnative button/input/select/detailsを使用する。無効状態は文字色だけでなく破線の境界で示す。フォーカスリングを消さない。320pxから1カラムに収まり、PC 1280×800では開始操作が見えること。

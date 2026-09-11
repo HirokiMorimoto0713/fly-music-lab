@@ -1,0 +1,11 @@
+{
+  "name": "fly-music-lab",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "start": "node scripts/serve.mjs",
+    "prepare:data": "python3 scripts/prepare_data.py",
+    "test": "node --test tests/*.test.mjs"
+  }
+}

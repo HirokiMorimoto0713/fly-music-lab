@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Fly Music Lab — 小さな脳の音楽室</title>
+    <meta
+      name="description"
+      content="ハエの実際の神経配線を使って、音と動きをつくる実験室。刺激と発火の関係を見て、聴いて、比べる。"
+    />
+    <link rel="icon" href="./public/favicon.svg" />
+    <link rel="stylesheet" href="./src/style.css" />
+  </head>
+  <body>
+    <a href="#workspace" class="skip">実験画面へ</a>
+    <header class="masthead">
+      <a class="wordmark" href="./"
+        >FLY MUSIC LAB <span>小さな脳の音楽室</span></a
+      ><a href="#guide" class="guide-link"
+        >しくみを知る <span aria-hidden="true">↗</span></a
+      >
+    </header>
+    <main>
+      <section class="intro">
+        <div>
+          <p class="eyebrow">A CONNECTOME IN CONCERT</p>
+          <h1>小さな脳から<br /><span>まだ知らない音</span></h1>
+        </div>
+        <div class="intro-aside">
+          <p>
+            刺激する。動きだす。音になる。<br />ハエの神経配線を、ひとつの楽器に。
+          </p>
+          <p class="fine">
+            MaleCNS v1.0 · 実配線 × 簡略化した神経モデル<br />音楽と身体への変換は、このアプリの創作です
+          </p>
+        </div>
+      </section>
+      <section id="workspace" class="workspace" aria-label="音楽実験室">
+        <div class="stage-header">
+          <div>
+            <span class="status-dot" id="status-dot"></span
+            ><span id="status" role="status"
+              >はじめると配線データを読み込みます</span
+            >
+          </div>
+          <span class="dataset">166,700 neurons / 25,582,938 connections</span>
+        </div>
+        <div class="lab-grid">
+          <section class="specimen">
+            <div class="panel-heading">
+              <h2>一匹の演奏者</h2>
+              <span id="neural-time">神経時間 0 ms</span>
+            </div>
+            <canvas
+              id="creature"
+              aria-label="神経活動に応じて歩き、向きを変え、羽を動かすハエのイラスト"
+            ></canvas>
+            <div class="stage-caption">
+              <span>動きは神経出力に対応したイラスト</span
+              ><span id="motion-readout">歩行 0 / 旋回 0</span>
+            </div>
+            <div class="stimulus-panel">
+              <p class="label">
+                刺激を選ぶ <span>1〜4キーでも操作できます</span>
+              </p>
+              <div class="stimuli">
+                <button data-stim="vision" disabled>
+                  <kbd>1</kbd> 両側の視覚回路</button
+                ><button data-stim="left" disabled><kbd>2</kbd> 左の回路</button
+                ><button data-stim="right" disabled>
+                  <kbd>3</kbd> 右の回路</button
+                ><button data-stim="flight" disabled>
+                  <kbd>4</kbd> LC4の回路
+                </button>
+              </div>
+              <p class="fine" id="stimulus-info">
+                クリックした場所の代わりに、名前の付いた神経集団へ刺激を送ります
+              </p>
+            </div>
+          </section>
+          <section class="score-panel">
+            <div class="panel-heading">
+              <h2>神経が描くフレーズ</h2>
+              <span id="note-count">0 notes</span>
+            </div>
+            <canvas
+              id="score"
+              aria-label="発火から生まれた音符のピアノロール"
+            ></canvas>
+            <div class="score-caption">
+              <span>上ほど高い音 / 左から右へ時間</span
+              ><span>最大128ステップ</span>
+            </div>
+            <div class="activity-heading">
+              <h3>いま発火した回路</h3>
+              <span>20 msごとの発火数</span>
+            </div>
+            <div id="activity"></div>
+            <p class="fine">
+              発火がある集団だけが音を鳴らします。数が多いほど音が強くなります。
+            </p>
+          </section>
+        </div>
+        <div class="transport">
+          <div class="transport-main">
+            <button id="start" class="primary">
+              実験をはじめる <span aria-hidden="true">▶</span></button
+            ><button id="stop" disabled>
+              停止 <span aria-hidden="true">■</span></button
+            ><button id="replay" disabled>同じ条件で再実行</button>
+          </div>
+          <label class="volume"
+            >音量
+            <input
+              id="volume"
+              type="range"
+              min="0"
+              max="100"
+              value="35"
+            /><output id="volume-value">35%</output></label
+          >
+        </div>
+        <p id="error" role="alert" class="error" hidden></p>
+      </section>
+      <section class="settings-row" aria-label="実験の設定">
+        <div class="section-label">
+          <h2>楽器のつくり方</h2>
+          <p>音のルールを変えてみる</p>
+        </div>
+        <label
+          >音階<select id="scale">
+            <option value="pentatonic">Cメジャー・ペンタトニック</option>
+            <option value="minor">Cマイナー・ペンタトニック</option>
+            <option value="chromatic">半音ずつの実験音階</option>
+          </select></label
+        ><label
+          >テンポ <span id="bpm-value">96 BPM</span
+          ><input id="bpm" type="range" min="40" max="180" value="96" /></label
+        ><label
+          >刺激の強さ <span id="strength-value">160 Hz</span
+          ><input
+            id="strength"
+            type="range"
+            min="0"
+            max="300"
+            value="160" /></label
+        ><label
+          >乱数シード<input
+            id="seed"
+            aria-describedby="error"
+            type="number"
+            min="1"
+            max="999999"
+            value="1" /></label
+        ><label class="checkbox"
+          ><input id="propagation" type="checkbox" checked />
+          接続を伝わる信号を有効にする</label
+        >
+        <p class="fine settings-note">
+          設定は次の演奏から適用。はじめると両側のLC9に一度刺激します。1音のステップは神経時間20
+          msをテンポに合わせて引き伸ばしたものです。
+        </p>
+      </section>
+      <section class="insight-grid">
+        <section class="anatomy-panel">
+          <div class="panel-heading">
+            <h2>配線の向こう側</h2>
+            <span id="spike-total">累計 0 spikes</span>
+          </div>
+          <canvas
+            id="anatomy"
+            aria-label="実際の細胞体の位置を間引いて表示した神経地図。直近の発火細胞を重ねて表示します"
+          ></canvas>
+          <p class="fine">
+            点は実データの細胞体位置の一部。計算には全166,700神経を使用。橙色は直近の発火細胞のうち最大200個です。
+          </p>
+          <details>
+            <summary>発火した神経のIDを見る</summary>
+            <div id="neuron-list" class="neuron-list">
+              刺激すると神経ID・型名・発火数が表示されます
+            </div>
+          </details>
+        </section>
+        <section class="take-panel">
+          <p class="eyebrow">KEEP THE MOMENT</p>
+          <h2>このフレーズを持ち帰る</h2>
+          <p>
+            WAVは聴くために。MIDIは音を育てるために。<br />実験JSONには、同じ計算をやり直せる条件が入ります。
+          </p>
+          <div class="export-buttons">
+            <button id="wav" disabled>WAVを書き出す</button
+            ><button id="midi" disabled>MIDIを書き出す</button
+            ><button id="json" disabled>実験JSONを保存</button>
+          </div>
+          <div class="save-row">
+            <button id="favorite" disabled>この実験を残す</button
+            ><label class="file-label"
+              >実験JSONを読み込む<input
+                id="import"
+                aria-describedby="error"
+                type="file"
+                accept=".json,application/json"
+            /></label>
+          </div>
+          <p id="save-status" role="status" class="fine">
+            保存先はこのブラウザ。残した実験は再計算できます。
+          </p>
+          <div id="saved-takes"></div>
+          <div class="comparison">
+            <h3>配線があると何が違う？</h3>
+            <p class="fine">
+              同じシードと刺激で、冒頭16ステップを「伝播あり /
+              なし」で計算します。直接刺激された神経は、伝播なしでも発火します。
+            </p>
+            <button id="compare" disabled>伝播あり・なしを比較</button>
+            <div id="comparison-result" aria-live="polite"></div>
+          </div>
+        </section>
+      </section>
+      <section id="guide" class="guide">
+        <div class="guide-title">
+          <p class="eyebrow">OPEN THE INSTRUMENT</p>
+          <h2>しくみがわかると<br />もっと遊べる</h2>
+          <p>まずは、この4つをつないで考えてみてください。</p>
+        </div>
+        <div class="lessons">
+          <article>
+            <span class="lesson-number">01</span>
+            <div>
+              <h3>配線は実物から</h3>
+              <p>
+                MaleCNSはオスのショウジョウバエの神経の接続を再構築したデータです。このアプリでは、Xenovaが抽出した166,700神経と25,582,938接続をすべて読み込みます。神経の「振る舞い」は次の数式で仮定します。
+              </p>
+            </div>
+          </article>
+          <article>
+            <span class="lesson-number">02</span>
+            <div>
+              <h3>刺激がたまると発火する</h3>
+              <p>
+                LIFモデルでは、神経の電位が時間とともに静かな状態に戻り、入力が重なると上がります。閾値を超えると発火し、接続先へ信号が届きます。0.1
+                msずつ計算します。刺激には再現できる乱数を使うので、シードも実験条件のひとつです。
+              </p>
+              <code>刺激 → 電位の変化 → 発火 → 接続先へ</code>
+            </div>
+          </article>
+          <article>
+            <span class="lesson-number">03</span>
+            <div>
+              <h3>音と動きは私たちの翻訳</h3>
+              <p>
+                5つの神経集団それぞれの発火数を、選んだ音階の5音に変換します。集団が発火したら音を鳴らし、発火数から音程と強さを決めます。歩行や旋回も、選んだ下行性ニューロンの発火率を速度に変えるルールです。ハエが音階を知っているわけではありません。
+              </p>
+              <details>
+                <summary>具体的な変換式</summary>
+                <p>
+                  音階の位置 = (集団番号 + floor(3 × log₂(1 + 発火数))) mod
+                  5。音の強さ = min(105, 32 + round(7 × log₂(1 +
+                  発火数)))。視覚の回路は1オクターブ上。他の4集団は低い音域です。歩行はDNp09
+                  / DNg100 / DNg97、旋回はDNa02 / DNa11 /
+                  DNg13の左右差、羽はDNp01を読み取ります。身体から脳への感覚フィードバックはありません。
+                </p>
+              </details>
+            </div>
+          </article>
+          <article>
+            <span class="lesson-number">04</span>
+            <div>
+              <h3>ひとつだけ変えて比べる</h3>
+              <p>
+                同じシードで再実行して同じフレーズになるかを確認。次に伝播を止めて、活動の広がりを比較します。音階だけを変えると、配線を変えずに同じ活動を別の音楽として聴けます。こうして原因を切り分けるのが実験の基本です。
+              </p>
+              <a href="./docs/guide.md" target="_blank" rel="noopener"
+                >3つの実習とコードの読み方 ↗</a
+              >
+            </div>
+          </article>
+        </div>
+      </section>
+      <footer>
+        <p>
+          これは神経活動を使った創作と観察の実験です。学習・意識・実際のハエの作曲能力は検証していません。
+        </p>
+        <div>
+          <a href="https://male-cns.janelia.org/" target="_blank" rel="noopener"
+            >MaleCNS / CC BY 4.0</a
+          ><a
+            href="https://huggingface.co/spaces/Xenova/fruit-fly-simulation"
+            target="_blank"
+            rel="noopener"
+            >Xenovaの計算実装 / MIT</a
+          ><a href="./docs/model.md" target="_blank" rel="noopener"
+            >モデルの仮定と出典</a
+          >
+        </div>
+      </footer>
+    </main>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

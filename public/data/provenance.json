@@ -1,0 +1,118 @@
+{
+  "revision": "776d115ee5aa934578a87fd6d260d138084f59c1",
+  "upstream": "https://huggingface.co/spaces/Xenova/fruit-fly-simulation/resolve/776d115ee5aa934578a87fd6d260d138084f59c1/",
+  "files": {
+    "offsets-000.bin.gz": {
+      "sha256": "92d07c6e051f8c1ffd54856eeaaa6deafd9e9be353dec8428eaecacd6bf979eb",
+      "bytes": 373277
+    },
+    "sources-000.bin.gz": {
+      "sha256": "af727ff992fb6d08af2c6ab2483782c2c24efad7e2fd3223a0cfdb8bc6428631",
+      "bytes": 4274980
+    },
+    "sources-001.bin.gz": {
+      "sha256": "23b559e6373e88ee813f634bd22ad5837c8141c60d14125a885909fda3a5361f",
+      "bytes": 4709932
+    },
+    "sources-002.bin.gz": {
+      "sha256": "d2a58e9dfeebd3e51d7312f2a0fca917f59552287340527fe6a4f2e6c4184ee4",
+      "bytes": 4940312
+    },
+    "sources-003.bin.gz": {
+      "sha256": "b978c5bcab5b2f6f25d6aab5824242416d0ece0b7c70bbb0e391a51f8815d0a2",
+      "bytes": 5141778
+    },
+    "sources-004.bin.gz": {
+      "sha256": "a60d8976ced1d3d909281acf6530fe38478e169408bd947cf33f239707890ce0",
+      "bytes": 5273857
+    },
+    "sources-005.bin.gz": {
+      "sha256": "cf61bd68c3bf65bcfea10811464b5d3a1d0e4f2380fac6c43551a384f5ded37d",
+      "bytes": 5347949
+    },
+    "sources-006.bin.gz": {
+      "sha256": "bbbab29ec94faa20f530fb59bea9e792be98c96da9663c058b41495b05ba171f",
+      "bytes": 5393958
+    },
+    "sources-007.bin.gz": {
+      "sha256": "519b3f742b7dfa88731b9573d948500e7cc0382ad519ad68c4996614d0978884",
+      "bytes": 5441391
+    },
+    "sources-008.bin.gz": {
+      "sha256": "9971d0157b0567490d07c186dbec86dcb03da77a9cf594fae066cfe89be343e1",
+      "bytes": 5429458
+    },
+    "sources-009.bin.gz": {
+      "sha256": "714d4b7ec952f70284b299e2f569a5513f3b31d97c9b62489e8ad92999532020",
+      "bytes": 4838482
+    },
+    "sources-010.bin.gz": {
+      "sha256": "3cfd5547381bd65dce0887117616384093b98a76bdc976a439ba9b3c41705456",
+      "bytes": 4722514
+    },
+    "sources-011.bin.gz": {
+      "sha256": "b870990873f766161843677a329ab14111be8f259f1f2d5ffb56e239d04febea",
+      "bytes": 4367497
+    },
+    "sources-012.bin.gz": {
+      "sha256": "526fc2ec0371a9eafcba42d7affd6ffd930bd77ccd193baf9d18f39a70dc741e",
+      "bytes": 902084
+    },
+    "counts-000.bin.gz": {
+      "sha256": "9557547409e4337e239cca437232519a46ab70da388c838c4690ce9075f8154a",
+      "bytes": 1484341
+    },
+    "counts-001.bin.gz": {
+      "sha256": "5b4b9f5bc758365f811c179136bde0efafefecb3f2e38d9c77c6f578348284cc",
+      "bytes": 1387906
+    },
+    "counts-002.bin.gz": {
+      "sha256": "99ca1bf06a5d5241bc03d6030c7316ac9ba04fae0e28f89b61df381ff742b51f",
+      "bytes": 1348762
+    },
+    "counts-003.bin.gz": {
+      "sha256": "45b67880669ec58ac52a32e7772c4235d18fc3aec30fd134dff7f31230580bb1",
+      "bytes": 1292309
+    },
+    "counts-004.bin.gz": {
+      "sha256": "bca4fb5858a053d522b1d0267485bdc3ee30834b30bf21ae1565083fd271ec08",
+      "bytes": 1224124
+    },
+    "counts-005.bin.gz": {
+      "sha256": "29bbb9aa73369c464efbe21b295fe8b366ccd4472a6063b79ae5148777a97545",
+      "bytes": 1171043
+    },
+    "counts-006.bin.gz": {
+      "sha256": "2209e06115901073f0ec44de5fd14e3d5883258b0b0a1041a9857c17a8918cf8",
+      "bytes": 1143999
+    },
+    "counts-007.bin.gz": {
+      "sha256": "3eeeb95127136c9ac255ca7c0f537bc03d746c550003fb801b818759a591d353",
+      "bytes": 1143644
+    },
+    "counts-008.bin.gz": {
+      "sha256": "1a39ecec53bc797e20b4721c68769509588549fbdd92ee9c844a37e0967ac236",
+      "bytes": 1079155
+    },
+    "counts-009.bin.gz": {
+      "sha256": "43c3de5488acec22dabd7d35e5a77fbcc00d759bfc2eae524bfef6d167db8db6",
+      "bytes": 1307947
+    },
+    "counts-010.bin.gz": {
+      "sha256": "9081dfc904a509862d52ccb07a4fa7fee3915b0ccd288d3dd4b5e5cf420dab26",
+      "bytes": 1351055
+    },
+    "counts-011.bin.gz": {
+      "sha256": "4f81baf423e14b4f64f8414b892c414c5a59901b4de587570604634f0e483e80",
+      "bytes": 1323261
+    },
+    "counts-012.bin.gz": {
+      "sha256": "0d6de1acde7eabb105484a787cab407f762fdd2d2b1f787fccc374c8df02f86f",
+      "bytes": 252165
+    },
+    "neurons.json.gz": {
+      "sha256": "e77e031a79293316cece9a27e88f18968b4bb93112842ab91fc45f84d737d864",
+      "bytes": 2381484
+    }
+  }
+}

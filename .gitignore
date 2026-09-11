@@ -1,0 +1,4 @@
+public/data/*.gz
+artifacts/
+node_modules/
+__pycache__/
