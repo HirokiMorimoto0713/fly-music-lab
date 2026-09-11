@@ -32,7 +32,7 @@ async function untilFrame(n) {
   });
 }
 try {
-  await page.goto(base);
+  await page.goto(base + "/free.html");
   await page.screenshot({
     path: new URL("initial.png", artifacts).pathname,
     fullPage: true,
@@ -189,7 +189,7 @@ try {
   await broken.route("**/public/data/manifest.json", (r) =>
     r.fulfill({ status: 404, body: "missing" }),
   );
-  await broken.goto(base);
+  await broken.goto(base + "/free.html");
   await broken.locator("#start").click();
   await broken.locator("#error").waitFor({ state: "visible", timeout: 30000 });
   assert.match(await broken.locator("#error").innerText(), /prepare:data/);

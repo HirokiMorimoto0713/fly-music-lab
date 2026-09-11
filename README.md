@@ -1,28 +1,42 @@
 # Fly Music Lab
 
-ハエの実際の神経配線から音と動きを生成し、仕組みを観察する日本語のローカルアプリです。
+「ハエの脳は音楽を理解できるか？」をテーマに、短いメロディーを入力して歌い返せるかを調べる日本語のローカルアプリです。ヘッドフォンをつけた3Dのハエと、お手本・返事の音符比較を使って実験できます。
+
+まずは [メロディー実験の実習ガイド](docs/echo-guide.md) を読んでください。以前の自由演奏は `/free.html` に残っています。
+
+![ヘッドフォンをつけた3Dハエとメロディー実験画面](docs/echo-preview.png)
 
 ## 起動
 
-Node.js 22以降、Python 3、PC版Chromeを推奨。npm依存のインストールは不要です。
+Node.js 22以降、Python 3、PC版Chromeを推奨。Three.jsの依存を固定版でインストールします。
 
 ```sh
-cd /home/motoha/projects/fly-music-lab
+git clone https://github.com/HirokiMorimoto0713/fly-music-lab.git
+cd fly-music-lab
+npm ci --ignore-scripts
 npm run prepare:data
 npm start
 ```
 
 ブラウザで http://127.0.0.1:4389 を開きます。配線データが準備済みなら `npm start` だけで使えます。ポートは `PORT=4390 npm start` のように変更できます。
 
-Macから母艦にSSHする場合、Macのターミナルで以下を実行し、Macのブラウザで同じURLを開きます。`母艦のSSH接続先` は普段接続に使っているホスト名に置き換えてください。
+Macから母艦にSSHする場合、Macのターミナルで以下を実行し、Macのブラウザで http://127.0.0.1:14389 を開きます。母艦へログイン済みのターミナルではなく、Mac側の新しいタブで実行してください。`母艦のSSH接続先` は普段接続に使っているホスト名に置き換えてください。
 
 ```sh
-ssh -N -L 4389:127.0.0.1:4389 motoha@母艦のSSH接続先
+ssh -N -L 14389:127.0.0.1:4389 motoha@母艦のSSH接続先
 ```
 
 サーバーは127.0.0.1にのみ接続します。ローカルアプリとして構築しており、公開サービスへのデプロイはしていません。ブラウザには全配線を展開するため数百MB以上の空きメモリが必要です。データ取得時以外の実験計算・音声合成・保存はブラウザ内で実行します。Google Fontsが利用できない場合は端末のフォントへフォールバックします。
 
-## できること
+## メロディー実験
+
+- 3〜5音のお手本作成、音程と長さの比較、試聴
+- 固定の実配線LIFの入力後状態から、追加の線形読み出し器で返事を推定
+- シード変更・未学習曲・伝播なし・状態リセットの比較
+- 学習ノートの保存・復元、返事のMIDI/WAV・実験JSON
+- ヘッドフォンをつけたThree.jsの3Dハエ（動きは再生に合わせた演技）
+
+## 自由演奏でできること
 
 - 166,700神経・25,582,938接続を使ったLIFの実計算
 - 名前の付いた神経への刺激、発火の可視化、音楽と身体への変換
@@ -33,9 +47,9 @@ ssh -N -L 4389:127.0.0.1:4389 motoha@母艦のSSH接続先
 
 ## 実装
 
-ES modules、Web Worker、Web Audio、Canvas、Nodeの静的サーバー。ビルド処理、APIキー、AIモデルAPI、DBは不要です。全神経をCPUで計算し、本文や生成データを外部サービスへ送信しません。
+ES modules、Web Worker、Web Audio、Three.js、Canvas、Nodeの静的サーバー。ビルド処理、APIキー、AIモデルAPI、DBは不要です。全神経をCPUで計算し、本文や生成データを外部サービスへ送信しません。
 
-`src/mapping.js` が音楽と動きのルール、`src/worker.js` が神経計算との接続、`vendor/brain.js` がLIF実装です。最初に読むなら実習ガイドから進めてください。
+メロディー実験の計算は `src/echo-model.js`、画面操作は `src/echo-ui.js`、3Dは `src/fly3d.js`。自由演奏の変換は `src/mapping.js`。共通のLIF実装は `vendor/brain.js` です。最初に読むなら実習ガイドから進めてください。
 
 ## 検証
 
@@ -49,4 +63,6 @@ npm test
 
 データ: MaleCNS collaboration（FlyEM / HHMI Janelia、University of Cambridge、MRC LMB、Google Research）、CC BY 4.0。圧縮配列とLIF実装は [Xenova](https://huggingface.co/spaces/Xenova/fruit-fly-simulation) の固定版から。上流のライセンスは `vendor/LICENSE`、取得したファイルのハッシュは `public/data/provenance.json` にあります。配布元データの選別方法や簡略化はモデル文書を参照してください。
 
-本アプリは学習するハエ、意識の再現、検証済みの生物学的エミュレーションではありません。音楽・身体への変換は創作上のルールで、保存操作は学習ではありません。
+メロディー実験で学習するのは追加の線形読み出し器です。神経配線は固定で、ハエ自身の学習、意識の再現、検証済みの生物学的エミュレーションを示すものではありません。音楽・身体への変換は創作上のルールで、保存操作は学習ではありません。
+
+3Dライブラリ: Three.js 0.186.0 / MIT（`node_modules/three/LICENSE`）。3Dのハエとヘッドフォンは独自の形状です。

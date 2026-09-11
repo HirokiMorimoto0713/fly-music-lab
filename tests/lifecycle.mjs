@@ -9,7 +9,7 @@ const browser = await chromium.launch({
 });
 const page = await browser.newPage();
 try {
-  await page.goto("http://127.0.0.1:4389");
+  await page.goto("http://127.0.0.1:4389/free.html");
   await page.locator("#start").click();
   await page.waitForFunction(() => window.labDiagnostics?.frames >= 3, null, {
     timeout: 120000,

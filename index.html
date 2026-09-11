@@ -3,298 +3,257 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Fly Music Lab — 小さな脳の音楽室</title>
+    <title>Fly Music Lab — ハエの脳は音楽を理解できるか？</title>
     <meta
       name="description"
-      content="ハエの実際の神経配線を使って、音と動きをつくる実験室。刺激と発火の関係を見て、聴いて、比べる。"
+      content="短いメロディーを教えて、ハエの脳モデルから歌い返す。音と神経の関係を調べる実験室。"
     />
     <link rel="icon" href="./public/favicon.svg" />
-    <link rel="stylesheet" href="./src/style.css" />
+    <link rel="stylesheet" href="./src/echo.css" />
   </head>
   <body>
-    <a href="#workspace" class="skip">実験画面へ</a>
-    <header class="masthead">
-      <a class="wordmark" href="./"
-        >FLY MUSIC LAB <span>小さな脳の音楽室</span></a
-      ><a href="#guide" class="guide-link"
-        >しくみを知る <span aria-hidden="true">↗</span></a
-      >
+    <a class="skip" href="#workbench">実験画面へ</a>
+    <header>
+      <a class="brand" href="./">FLY MUSIC LAB <span>小さな脳の音楽室</span></a>
+      <nav aria-label="モード">
+        <a href="./free.html">自由演奏</a><a href="#how">しくみを知る</a>
+      </nav>
     </header>
     <main>
-      <section class="intro">
+      <section class="heading">
         <div>
-          <p class="eyebrow">A CONNECTOME IN CONCERT</p>
-          <h1>小さな脳から<br /><span>まだ知らない音</span></h1>
+          <p class="eyebrow">EXPERIMENT 02 / LISTEN & ECHO</p>
+          <h1>ハエの脳は<br />音楽を理解できるか？</h1>
         </div>
-        <div class="intro-aside">
-          <p>
-            刺激する。動きだす。音になる。<br />ハエの神経配線を、ひとつの楽器に。
-          </p>
-          <p class="fine">
-            MaleCNS v1.0 · 実配線 × 簡略化した神経モデル<br />音楽と身体への変換は、このアプリの創作です
-          </p>
-        </div>
-      </section>
-      <section id="workspace" class="workspace" aria-label="音楽実験室">
-        <div class="stage-header">
-          <div>
-            <span class="status-dot" id="status-dot"></span
-            ><span id="status" role="status"
-              >はじめると配線データを読み込みます</span
-            >
-          </div>
-          <span class="dataset">166,700 neurons / 25,582,938 connections</span>
-        </div>
-        <div class="lab-grid">
-          <section class="specimen">
-            <div class="panel-heading">
-              <h2>一匹の演奏者</h2>
-              <span id="neural-time">神経時間 0 ms</span>
-            </div>
-            <canvas
-              id="creature"
-              aria-label="神経活動に応じて歩き、向きを変え、羽を動かすハエのイラスト"
-            ></canvas>
-            <div class="stage-caption">
-              <span>動きは神経出力に対応したイラスト</span
-              ><span id="motion-readout">歩行 0 / 旋回 0</span>
-            </div>
-            <div class="stimulus-panel">
-              <p class="label">
-                刺激を選ぶ <span>1〜4キーでも操作できます</span>
-              </p>
-              <div class="stimuli">
-                <button data-stim="vision" disabled>
-                  <kbd>1</kbd> 両側の視覚回路</button
-                ><button data-stim="left" disabled><kbd>2</kbd> 左の回路</button
-                ><button data-stim="right" disabled>
-                  <kbd>3</kbd> 右の回路</button
-                ><button data-stim="flight" disabled>
-                  <kbd>4</kbd> LC4の回路
-                </button>
-              </div>
-              <p class="fine" id="stimulus-info">
-                クリックした場所の代わりに、名前の付いた神経集団へ刺激を送ります
-              </p>
-            </div>
-          </section>
-          <section class="score-panel">
-            <div class="panel-heading">
-              <h2>神経が描くフレーズ</h2>
-              <span id="note-count">0 notes</span>
-            </div>
-            <canvas
-              id="score"
-              aria-label="発火から生まれた音符のピアノロール"
-            ></canvas>
-            <div class="score-caption">
-              <span>上ほど高い音 / 左から右へ時間</span
-              ><span>最大128ステップ</span>
-            </div>
-            <div class="activity-heading">
-              <h3>いま発火した回路</h3>
-              <span>20 msごとの発火数</span>
-            </div>
-            <div id="activity"></div>
-            <p class="fine">
-              発火がある集団だけが音を鳴らします。数が多いほど音が強くなります。
-            </p>
-          </section>
-        </div>
-        <div class="transport">
-          <div class="transport-main">
-            <button id="start" class="primary">
-              実験をはじめる <span aria-hidden="true">▶</span></button
-            ><button id="stop" disabled>
-              停止 <span aria-hidden="true">■</span></button
-            ><button id="replay" disabled>同じ条件で再実行</button>
-          </div>
-          <label class="volume"
-            >音量
-            <input
-              id="volume"
-              type="range"
-              min="0"
-              max="100"
-              value="35"
-            /><output id="volume-value">35%</output></label
+        <p>
+          短いメロディーを教える。<br />どんな返事が返ってくるだろう。<br /><span
+            class="fine"
+            >実配線の脳モデル ＋ 学習する音符の読み出し器</span
           >
-        </div>
-        <p id="error" role="alert" class="error" hidden></p>
-      </section>
-      <section class="settings-row" aria-label="実験の設定">
-        <div class="section-label">
-          <h2>楽器のつくり方</h2>
-          <p>音のルールを変えてみる</p>
-        </div>
-        <label
-          >音階<select id="scale">
-            <option value="pentatonic">Cメジャー・ペンタトニック</option>
-            <option value="minor">Cマイナー・ペンタトニック</option>
-            <option value="chromatic">半音ずつの実験音階</option>
-          </select></label
-        ><label
-          >テンポ <span id="bpm-value">96 BPM</span
-          ><input id="bpm" type="range" min="40" max="180" value="96" /></label
-        ><label
-          >刺激の強さ <span id="strength-value">160 Hz</span
-          ><input
-            id="strength"
-            type="range"
-            min="0"
-            max="300"
-            value="160" /></label
-        ><label
-          >乱数シード<input
-            id="seed"
-            aria-describedby="error"
-            type="number"
-            min="1"
-            max="999999"
-            value="1" /></label
-        ><label class="checkbox"
-          ><input id="propagation" type="checkbox" checked />
-          接続を伝わる信号を有効にする</label
-        >
-        <p class="fine settings-note">
-          設定は次の演奏から適用。はじめると両側のLC9に一度刺激します。1音のステップは神経時間20
-          msをテンポに合わせて引き伸ばしたものです。
         </p>
       </section>
-      <section class="insight-grid">
-        <section class="anatomy-panel">
-          <div class="panel-heading">
-            <h2>配線の向こう側</h2>
-            <span id="spike-total">累計 0 spikes</span>
+      <section id="workbench" class="workbench" aria-label="メロディー実験">
+        <div class="fly-stage">
+          <div class="stage-label">
+            <span>あなたの小さな生徒</span
+            ><strong id="fly-state">お手本を待っています</strong>
           </div>
           <canvas
-            id="anatomy"
-            aria-label="実際の細胞体の位置を間引いて表示した神経地図。直近の発火細胞を重ねて表示します"
+            id="fly3d"
+            aria-label="ヘッドフォンをつけた3Dのハエ。ドラッグで回転できます"
           ></canvas>
-          <p class="fine">
-            点は実データの細胞体位置の一部。計算には全166,700神経を使用。橙色は直近の発火細胞のうち最大200個です。
-          </p>
-          <details>
-            <summary>発火した神経のIDを見る</summary>
-            <div id="neuron-list" class="neuron-list">
-              刺激すると神経ID・型名・発火数が表示されます
-            </div>
-          </details>
-        </section>
-        <section class="take-panel">
-          <p class="eyebrow">KEEP THE MOMENT</p>
-          <h2>このフレーズを持ち帰る</h2>
-          <p>
-            WAVは聴くために。MIDIは音を育てるために。<br />実験JSONには、同じ計算をやり直せる条件が入ります。
-          </p>
-          <div class="export-buttons">
-            <button id="wav" disabled>WAVを書き出す</button
-            ><button id="midi" disabled>MIDIを書き出す</button
-            ><button id="json" disabled>実験JSONを保存</button>
+          <div class="stage-bottom">
+            <span id="three-status">3Dを準備中</span
+            ><label
+              ><input id="quiet-motion" type="checkbox" />動きを減らす</label
+            >
           </div>
-          <div class="save-row">
-            <button id="favorite" disabled>この実験を残す</button
-            ><label class="file-label"
-              >実験JSONを読み込む<input
-                id="import"
-                aria-describedby="error"
+          <label class="rotate-label"
+            >見る角度<input
+              id="angle"
+              type="range"
+              min="-180"
+              max="180"
+              value="-20"
+          /></label>
+          <p class="fine">身体の演技は音の再生に同期したイラストです</p>
+          <div class="neural-readout">
+            <span>直近の神経計算</span><strong id="spikes">— spikes</strong
+            ><span id="neural-phase">まだ計算していません</span>
+          </div>
+        </div>
+        <div class="desk">
+          <p class="eyebrow">YOUR MELODY</p>
+          <h2>まずは3音から</h2>
+          <p class="hint">鍵盤を押して3〜5音。音符を押すと長さが変わります。</p>
+          <div id="keyboard" class="keyboard" aria-label="お手本の鍵盤"></div>
+          <div class="editor-label">
+            <span>お手本</span><output id="length">3 / 5音</output>
+          </div>
+          <div id="editor" class="note-strip" aria-label="お手本の音符"></div>
+          <div class="small-actions">
+            <button id="undo">最後の音を戻す</button
+            ><button id="clear">空にする</button
+            ><button id="listen">お手本を聴く</button>
+          </div>
+          <div class="options">
+            <label
+              >返事のシード<input
+                id="test-seed"
+                type="number"
+                min="1"
+                max="999999"
+                value="1"
+            /></label>
+
+            <label>お手本<select id="preset"></select></label
+            ><label
+              >テンポ<input
+                id="tempo"
+                type="number"
+                min="60"
+                max="160"
+                value="100"
+              />
+              BPM</label
+            ><label
+              >音量<input id="volume" type="range" min="0" max="80" value="35"
+            /></label>
+          </div>
+          <div class="lesson-actions">
+            <button id="train" class="primary">練習をはじめる</button
+            ><button id="answer">歌い返してもらう</button
+            ><button id="cancel" disabled>停止</button>
+          </div>
+          <p id="lesson-status" role="status">
+            最初の練習では8曲と今のお手本を使います。配線の初回読み込みに少し時間がかかります。
+          </p>
+          <p id="error" role="alert" hidden></p>
+          <p class="fine" id="learned">
+            読み出し器は未学習です。先に練習してください。
+          </p>
+          <label class="check"
+            ><input
+              type="checkbox"
+              id="audible"
+              checked
+            />練習中のお手本も聴く</label
+          >
+          <p class="fine">
+            入力は鍵盤の音符です。録音や音楽ファイルの読み込みは対象外です。
+          </p>
+        </div>
+      </section>
+      <section class="reply-section" aria-labelledby="reply-heading">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">THE REPLY</p>
+            <h2 id="reply-heading">お手本と返事を聴き比べる</h2>
+          </div>
+          <span id="test-kind">まだ返事はありません</span>
+        </div>
+        <div class="comparison-roll">
+          <div>
+            <h3>あなたのお手本</h3>
+            <div id="target-score" class="score-line"></div>
+          </div>
+          <div>
+            <h3>ハエの返事</h3>
+            <div id="reply-score" class="score-line">
+              練習したあと「歌い返してもらう」を押してください
+            </div>
+          </div>
+        </div>
+        <div id="metrics" class="metrics" aria-live="polite"></div>
+        <div class="small-actions">
+          <button id="replay-answer" disabled>返事をもう一度聴く</button
+          ><button id="export-midi" disabled>MIDIを保存</button
+          ><button id="export-wav" disabled>WAVを保存</button
+          ><button id="export-json" disabled>実験JSONを保存</button>
+        </div>
+        <p class="fine">
+          一致率は同じ位置の音程・長さを比較します。足りない音・余った音も不一致です。理解の点数ではありません。
+        </p>
+      </section>
+      <section class="controls-section">
+        <div>
+          <p class="eyebrow">CHANGE ONE THING</p>
+          <h2>覚えた？ それとも偶然？</h2>
+          <p>
+            練習済みの曲では再現性を、新しい曲では応用を試せます。お手本を変えても「練習」を押さなければ、学習には追加されません。
+          </p>
+          <p class="fine">
+            練習はシード1。上の「返事のシード」が1なら復習、2以降で揺らぎへの強さを試します。
+          </p>
+          <button id="compare" disabled>3つの条件を比べる</button>
+          <div class="table-wrap">
+            <table>
+              <caption>
+                今のお手本での対照実験
+              </caption>
+              <thead>
+                <tr>
+                  <th>条件</th>
+                  <th>音程</th>
+                  <th>長さ</th>
+                  <th>聴く</th>
+                </tr>
+              </thead>
+              <tbody id="controls-results">
+                <tr>
+                  <td colspan="4">
+                    通常 / 伝播なし / 聴いたあとに状態をリセット
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="fine">
+            対照条件では再学習しません。伝播なしでも性能が残るなら、配線の必要性をさらに調べる必要があります。
+          </p>
+        </div>
+        <aside>
+          <h3>実験ノート</h3>
+          <p>
+            学習済みの読み出し器とお手本は、このブラウザに自動保存します。URLやブラウザが変わる場合は、ノートを書き出して持ち運べます。
+          </p>
+          <div class="small-actions">
+            <button id="save-notebook" disabled>ノートを書き出す</button
+            ><label class="file-button"
+              >ノートを読み込む<input
+                id="import-notebook"
                 type="file"
                 accept=".json,application/json"
             /></label>
           </div>
-          <p id="save-status" role="status" class="fine">
-            保存先はこのブラウザ。残した実験は再計算できます。
-          </p>
-          <div id="saved-takes"></div>
-          <div class="comparison">
-            <h3>配線があると何が違う？</h3>
-            <p class="fine">
-              同じシードと刺激で、冒頭16ステップを「伝播あり /
-              なし」で計算します。直接刺激された神経は、伝播なしでも発火します。
+          <p id="storage-status" role="status" class="fine"></p>
+          <details>
+            <summary>学習をやり直す</summary>
+            <p>
+              現在の学習結果を消します。残す場合は先にノートを書き出してください。
             </p>
-            <button id="compare" disabled>伝播あり・なしを比較</button>
-            <div id="comparison-result" aria-live="polite"></div>
-          </div>
-        </section>
+            <button id="forget">学習を消去する</button>
+          </details>
+        </aside>
       </section>
-      <section id="guide" class="guide">
-        <div class="guide-title">
-          <p class="eyebrow">OPEN THE INSTRUMENT</p>
-          <h2>しくみがわかると<br />もっと遊べる</h2>
-          <p>まずは、この4つをつないで考えてみてください。</p>
-        </div>
-        <div class="lessons">
+      <section id="how" class="how">
+        <p class="eyebrow">OPEN THE EXPERIMENT</p>
+        <h2>どこまでがハエで<br />どこからが私たちの仕組み？</h2>
+        <div class="explain-grid">
           <article>
-            <span class="lesson-number">01</span>
-            <div>
-              <h3>配線は実物から</h3>
-              <p>
-                MaleCNSはオスのショウジョウバエの神経の接続を再構築したデータです。このアプリでは、Xenovaが抽出した166,700神経と25,582,938接続をすべて読み込みます。神経の「振る舞い」は次の数式で仮定します。
-              </p>
-            </div>
+            <h3>1　音符を刺激にする</h3>
+            <p>
+              ド〜シを7つの入力群へ割り当てます。JOという注釈のある神経を使いますが、音階への対応は人工的です。ハエの耳を忠実に再現したものではありません。
+            </p>
           </article>
           <article>
-            <span class="lesson-number">02</span>
-            <div>
-              <h3>刺激がたまると発火する</h3>
-              <p>
-                LIFモデルでは、神経の電位が時間とともに静かな状態に戻り、入力が重なると上がります。閾値を超えると発火し、接続先へ信号が届きます。0.1
-                msずつ計算します。刺激には再現できる乱数を使うので、シードも実験条件のひとつです。
-              </p>
-              <code>刺激 → 電位の変化 → 発火 → 接続先へ</code>
-            </div>
+            <h3>2　聴いたあとの状態を読む</h3>
+            <p>
+              166,700神経と25,582,938接続のLIFモデルを計算。お手本が終わって20
+              ms待ち、入力群以外の電位・シナプス状態・発火を読み出します。全配線は固定です。
+            </p>
           </article>
           <article>
-            <span class="lesson-number">03</span>
-            <div>
-              <h3>音と動きは私たちの翻訳</h3>
-              <p>
-                5つの神経集団それぞれの発火数を、選んだ音階の5音に変換します。集団が発火したら音を鳴らし、発火数から音程と強さを決めます。歩行や旋回も、選んだ下行性ニューロンの発火率を速度に変えるルールです。ハエが音階を知っているわけではありません。
-              </p>
-              <details>
-                <summary>具体的な変換式</summary>
-                <p>
-                  音階の位置 = (集団番号 + floor(3 × log₂(1 + 発火数))) mod
-                  5。音の強さ = min(105, 32 + round(7 × log₂(1 +
-                  発火数)))。視覚の回路は1オクターブ上。他の4集団は低い音域です。歩行はDNp09
-                  / DNg100 / DNg97、旋回はDNa02 / DNa11 /
-                  DNg13の左右差、羽はDNp01を読み取ります。身体から脳への感覚フィードバックはありません。
-                </p>
-              </details>
-            </div>
+            <h3>3　歌い返す変換を学ぶ</h3>
+            <p>
+              追加した線形の読み出し器だけを、お手本と神経状態の組で学習します。返事の推定には曲名や正解を渡しません。生成した音符を同じテンポで再生します。
+            </p>
           </article>
           <article>
-            <span class="lesson-number">04</span>
-            <div>
-              <h3>ひとつだけ変えて比べる</h3>
-              <p>
-                同じシードで再実行して同じフレーズになるかを確認。次に伝播を止めて、活動の広がりを比較します。音階だけを変えると、配線を変えずに同じ活動を別の音楽として聴けます。こうして原因を切り分けるのが実験の基本です。
-              </p>
-              <a href="./docs/guide.md" target="_blank" rel="noopener"
-                >3つの実習とコードの読み方 ↗</a
-              >
-            </div>
+            <h3>4　違いを確かめる</h3>
+            <p>
+              同じ曲への適合と、知らない曲への応用は別です。音程と長さが合っても、音楽を理解した証拠にはなりません。入力後に残った状態も、生物の長期記憶とは区別します。
+            </p>
           </article>
         </div>
+        <a href="./docs/echo-guide.md">実習・変換式・検証結果の読み方 ↗</a>
       </section>
       <footer>
-        <p>
-          これは神経活動を使った創作と観察の実験です。学習・意識・実際のハエの作曲能力は検証していません。
-        </p>
-        <div>
-          <a href="https://male-cns.janelia.org/" target="_blank" rel="noopener"
-            >MaleCNS / CC BY 4.0</a
-          ><a
-            href="https://huggingface.co/spaces/Xenova/fruit-fly-simulation"
-            target="_blank"
-            rel="noopener"
-            >Xenovaの計算実装 / MIT</a
-          ><a href="./docs/model.md" target="_blank" rel="noopener"
-            >モデルの仮定と出典</a
-          >
-        </div>
+        <span>問いを楽しむための実験室</span
+        ><a href="./docs/model.md">モデルと出典</a
+        ><a href="./free.html">以前の自由演奏へ</a>
       </footer>
     </main>
-    <script type="module" src="./src/main.js"></script>
+    <script type="module" src="./src/echo-ui.js"></script>
   </body>
 </html>
