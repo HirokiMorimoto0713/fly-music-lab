@@ -1,3 +1,4 @@
+import { ReactionView } from "./reaction.js";
 import { AudioEngine, voice, midiBytes, renderWav } from "./audio.js";
 import {
   VERSION,
@@ -26,6 +27,7 @@ let melody = structuredClone(PRESETS[0].notes),
   seq = 0,
   fly = null,
   playing = null;
+const reactionView = new ReactionView($("reaction-map"));
 window.echoDiagnostics = { version: VERSION };
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 const setStatus = (t) => ($("lesson-status").textContent = t);
@@ -74,9 +76,7 @@ function sync() {
   document
     .querySelectorAll("[data-control-play]")
     .forEach(
-      (b) =>
-        (b.disabled =
-          busy || !comparisons[Number(b.dataset.controlPlay)]?.reply.length),
+      (b) => (b.disabled = busy || !comparisons[Number(b.dataset.controlPlay)]),
     );
   $("learned").textContent = model
     ? `${samples.length}曲で読み出し器を学習済み · 練習シード1 · ハエの配線は固定`
@@ -296,6 +296,10 @@ function terminate() {
   }
 }
 function rpc(notes, options) {
+  reactionView.start(
+    notes.map((n) => NAMES[PITCHES.indexOf(n.pitch)]).join(" → ") +
+      ` / シード${options.seed}`,
+  );
   if (!worker) {
     worker = new Worker(new URL("./echo-worker.js", import.meta.url), {
       type: "module",
@@ -303,6 +307,7 @@ function rpc(notes, options) {
     worker.onmessage = ({ data: d }) => {
       if (d.type === "progress") setStatus(d.text);
       if (d.type === "loaded") {
+        reactionView.setAnatomy(d.anatomy);
         window.echoDiagnostics = {
           ...window.echoDiagnostics,
           n: d.n,
@@ -311,6 +316,7 @@ function rpc(notes, options) {
         };
       }
       if (d.type === "trace") {
+        reactionView.add(d.frame);
         $("spikes").textContent = d.frame.spikes.toLocaleString() + " spikes";
         $("neural-phase").textContent =
           d.frame.phase === "silent"
@@ -422,6 +428,12 @@ $("train").onclick = () =>
   });
 function display(r) {
   result = r;
+  reactionView.show(
+    r.trace,
+    (r.label || r.kind) +
+      " / " +
+      r.target.map((n) => NAMES[PITCHES.indexOf(n.pitch)]).join(" → "),
+  );
   drawScore("target-score", r.target);
   drawScore("reply-score", r.reply, r.target);
   $("test-kind").textContent = r.kind;
@@ -507,7 +519,7 @@ $("compare").onclick = () =>
       }
       const td = document.createElement("td"),
         b = document.createElement("button");
-      b.textContent = r.reply.length ? "返事を聴く" : "無音";
+      b.textContent = r.reply.length ? "返事と反応" : "無音の反応";
       b.dataset.controlPlay = i;
       b.onclick = () =>
         run(async () => {

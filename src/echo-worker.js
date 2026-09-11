@@ -15,6 +15,15 @@ onmessage = async ({ data }) => {
         n: graph.n,
         edges: graph.sources.length,
         channels: inputs.channels.map((c) => c.length),
+        anatomy: graph.neurons
+          .filter(
+            (r) =>
+              Array.isArray(r[6]) &&
+              r[6].length === 3 &&
+              r[6].every(Number.isFinite),
+          )
+          .filter((_, i) => i % 20 === 0)
+          .map((r) => r[6]),
       });
     }
     const result = capture(brain, inputs, data.notes, data.options, (frame) =>

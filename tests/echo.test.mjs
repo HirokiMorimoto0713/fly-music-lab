@@ -1,3 +1,4 @@
+import { reactionSnapshot } from "../src/reaction.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -106,4 +107,21 @@ test("real graph: external readout, unseen inputs, state reset and transmission 
     JSON.stringify(report, null, 2),
   );
   console.log(report);
+});
+
+test("reaction image reports measured spikes and missing positions without fabricating cells", () => {
+  const rows = [
+    ["a", "type", null, null, null, null, [1, 2, 3]],
+    ["b", "type", null, null, null, null, null],
+    ["c", "type", null, null, null, null, [4, 5, 6]],
+  ];
+  const snap = reactionSnapshot(rows, new Uint32Array([3, 2, 0]), 200);
+  assert.equal(snap.total, 5);
+  assert.equal(snap.active, 2);
+  assert.equal(snap.withoutPosition, 1);
+  assert.deepEqual(
+    snap.cells.map((c) => [c.id, c.count, c.rate]),
+    [["a", 3, 150]],
+  );
+  assert.equal(reactionSnapshot(rows, new Uint32Array(3), 200).cells.length, 0);
 });

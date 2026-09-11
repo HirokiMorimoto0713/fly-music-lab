@@ -124,6 +124,38 @@
           </p>
         </div>
       </section>
+      <section class="reaction-section" aria-labelledby="reaction-heading">
+        <div>
+          <p class="eyebrow">INSIDE THE BRAIN</p>
+          <h2 id="reaction-heading">音を聴いた脳の反応</h2>
+          <p>
+            橙色の点が、実際に発火した神経です。音ごとの反応と、音が止まったあとの状態を切り替えて見られます。
+          </p>
+          <label
+            >見る区間
+            <select
+              id="reaction-frame"
+              disabled
+              aria-describedby="reaction-summary"
+            ></select
+          ></label>
+          <button id="reaction-png" disabled>反応の画像を保存</button>
+          <p id="reaction-summary" role="status">
+            練習か「歌い返してもらう」で反応を計算します
+          </p>
+          <p class="fine">
+            背景は細胞体位置の約20分の1。橙色は位置が分かる発火細胞のうち発火数上位500個まで。点が大きいほど発火率が高く、区間ごとの自動拡大はしません。全配線で計算しています。
+          </p>
+          <p class="fine">
+            画像は計算した反応の静止図です。頭の形を描いたイラストや、脳の活動を撮影した画像ではありません。
+          </p>
+        </div>
+        <canvas
+          id="reaction-map"
+          aria-label="神経細胞の実位置に計算した発火を重ねた反応図"
+          aria-describedby="reaction-summary"
+        ></canvas>
+      </section>
       <section class="reply-section" aria-labelledby="reply-heading">
         <div class="section-title">
           <div>

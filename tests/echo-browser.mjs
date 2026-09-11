@@ -88,6 +88,15 @@ try {
     await page.evaluate(() => window.echoDiagnostics.result.score.both),
     100,
   );
+  assert.equal(await page.locator("#reaction-frame option").count(), 4);
+  const silent = await page.locator("#reaction-map").screenshot();
+  await page.locator("#reaction-frame").selectOption("0");
+  assert.notDeepEqual(await page.locator("#reaction-map").screenshot(), silent);
+  const png = await download("reaction-png", "brain-reaction.png");
+  assert.equal(png.subarray(1, 4).toString(), "PNG");
+  await page
+    .locator(".reaction-section")
+    .screenshot({ path: new URL("reaction-section.png", root).pathname });
   const baseline = await page.evaluate(
     () => window.echoDiagnostics.result.reply,
   );
@@ -119,6 +128,15 @@ try {
   assert.equal(controls.length, 3);
   assert.equal(controls[1].reply.length, 0);
   assert.equal(controls[2].reply.length, 0);
+  await page.locator('[data-control-play="2"]').click();
+  await idle();
+  assert.equal(
+    await page.locator("#reaction-map").getAttribute("data-active"),
+    "0",
+  );
+  assert.ok(
+    (await page.locator("#reaction-summary").innerText()).includes("0回発火"),
+  );
   await page.screenshot({
     path: new URL("echo-result.png", root).pathname,
     fullPage: true,

@@ -1,3 +1,4 @@
+import { reactionSnapshot } from "./reaction.js";
 // 人工的な音符入力と、固定配線に追加する学習可能な読み出し器。
 // decode() は神経特徴量と学習済み係数だけを受け取り、お手本を参照しない。
 export const VERSION = "echo-v1";
@@ -174,7 +175,16 @@ export function capture(
     for (const i of inputs.channels[PITCHES.indexOf(note.pitch)])
       rates[i] = 220;
     const r = brain.batch(150 * note.duration, rates, !propagation);
-    trace.push({ phase: "listen", spikes: r.total, tick: r.tick });
+    trace.push({
+      phase: "listen",
+      spikes: r.total,
+      tick: r.tick,
+      reaction: reactionSnapshot(
+        brain.graph.neurons,
+        r.counts,
+        150 * note.duration,
+      ),
+    });
     progress(trace.at(-1));
     rates.fill(0);
     brain.batch(30, rates, !propagation);
@@ -182,7 +192,12 @@ export function capture(
   rates.fill(0);
   if (resetAfter) brain.reset();
   const tail = brain.batch(200, rates, !propagation);
-  trace.push({ phase: "silent", spikes: tail.total, tick: tail.tick });
+  trace.push({
+    phase: "silent",
+    spikes: tail.total,
+    tick: tail.tick,
+    reaction: reactionSnapshot(brain.graph.neurons, tail.counts, 200),
+  });
   progress(trace.at(-1));
   return {
     features: featuresOf(brain, inputs.excluded, tail.counts),
