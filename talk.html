@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>ハエさんと話す — Fly Music Lab</title>
+    <meta
+      name="description"
+      content="言葉を目印へ、神経の出力を短い字幕へ。小さな脳とやり取りする実験。"
+    />
+    <link rel="icon" href="./public/favicon.svg" />
+    <link rel="stylesheet" href="./src/echo.css" />
+    <link rel="stylesheet" href="./src/talk.css" />
+  </head>
+  <body>
+    <a class="skip" href="#conversation">会話へ</a>
+    <header>
+      <a class="brand" href="./">FLY MUSIC LAB <span>小さな脳の通訳室</span></a>
+      <nav aria-label="モード">
+        <a href="./">音楽</a><a href="./draw.html">お絵かき</a
+        ><a href="./talk.html" aria-current="page">会話</a>
+      </nav>
+    </header>
+    <main>
+      <section class="heading">
+        <div>
+          <p class="eyebrow">EXPERIMENT 04 / SIGNALS TO WORDS</p>
+          <h1>その一歩を<br />言葉にすると</h1>
+        </div>
+        <p>
+          こちらの言葉を、小さな目印へ。<br />ハエさんの出力を、短い字幕へ。<br /><span
+            class="fine"
+            >思考を読んだ言葉ではなく、神経出力の翻訳です</span
+          >
+        </p>
+      </section>
+      <section id="conversation" class="conversation">
+        <div class="companion">
+          <canvas
+            id="fly3d"
+            aria-label="神経出力に合わせて動く3Dハエ。ドラッグで回転"
+          ></canvas>
+          <p id="three-status" class="fine">3Dを準備中</p>
+          <label
+            >見る角度<input
+              id="angle"
+              type="range"
+              min="-180"
+              max="180"
+              value="-20"
+          /></label>
+          <div class="subtitle">
+            <span>ハエさん / 出力の字幕</span><strong id="subtitle">……</strong>
+            <p id="basis">まだ神経を計算していません</p>
+          </div>
+          <canvas
+            id="arena"
+            width="512"
+            height="512"
+            aria-label="ハエと目印の位置。橙が目印、緑がハエ"
+          ></canvas>
+          <p class="fine">橙の点が目印。移動は出力に対応させた演技です</p>
+        </div>
+        <div class="dialogue">
+          <div class="session-controls">
+            <label
+              >シード<input
+                id="seed"
+                type="number"
+                min="1"
+                max="999999"
+                value="1" /></label
+            ><label
+              ><input
+                id="propagation"
+                type="checkbox"
+                checked
+              />神経の伝播</label
+            ><button id="reset">新しいセッション</button>
+          </div>
+          <p id="status" role="status">最初の送信で全配線を読み込みます</p>
+          <div id="messages" aria-label="会話の記録">
+            <p class="welcome">
+              「こっちにおいで」と伝えてみてください。<br />字幕の下に、言葉になった出力の根拠が残ります。
+            </p>
+          </div>
+          <form id="send-form">
+            <label for="message">ハエさんに伝える</label>
+            <div class="composer">
+              <input
+                id="message"
+                type="text"
+                maxlength="120"
+                placeholder="こっちにおいで"
+                autocomplete="off"
+              /><button id="send" class="primary">伝える</button>
+            </div>
+          </form>
+          <div class="phrases">
+            <button data-command="come">こっちにおいで</button
+            ><button data-command="left">左を見て</button
+            ><button data-command="right">右を見て</button
+            ><button data-command="wait">少し待って</button>
+          </div>
+          <p id="conversion" class="fine">
+            言葉の解釈はアプリが担当します。ハエの脳へ文章は渡しません
+          </p>
+          <div class="actions">
+            <button id="pause" disabled>途中で止める</button
+            ><button id="export" disabled>会話と根拠を保存</button>
+          </div>
+          <p id="error" role="alert" hidden></p>
+        </div>
+      </section>
+      <section class="evidence">
+        <div>
+          <h2>字幕の根拠</h2>
+          <p>直近最大60 msの平均発火率を読んでいます</p>
+          <dl>
+            <div>
+              <dt>左のDNa02</dt>
+              <dd id="left-rate">—</dd>
+            </div>
+            <div>
+              <dt>右のDNa02</dt>
+              <dd id="right-rate">—</dd>
+            </div>
+            <div>
+              <dt>前進の読出し DNp09</dt>
+              <dd id="forward-rate">—</dd>
+            </div>
+          </dl>
+          <p class="fine">
+            左右差8 Hz以上で「右かな / 左かな」、差が小さくDNp09が10
+            Hz以上で「前へ行こう」。それ以外は「……」。閾値と日本語はアプリ独自です
+          </p>
+          <p id="network" class="fine">神経データは未読込</p>
+        </div>
+        <div>
+          <h2>最後のやり取りの脳反応</h2>
+          <div class="actions">
+            <label>見る区間<select id="reaction-frame" disabled></select></label
+            ><button id="reaction-png" disabled>反応の画像を保存</button>
+          </div>
+          <canvas
+            id="reaction-map"
+            aria-label="実計算の発火を細胞体位置に重ねた反応図"
+          ></canvas>
+          <p id="reaction-summary" class="fine">送信すると反応を表示します</p>
+          <p class="fine">
+            反応図は各20
+            msの発火。背景は約1/20、活動細胞は位置のある上位500個まで。計算は全配線です
+          </p>
+        </div>
+      </section>
+      <section class="talk-guide">
+        <h2>言葉になるまで</h2>
+        <p>
+          日本語 → 目印 → 左右のLC9へ人工的な視覚入力 → 全配線LIF →
+          DNa02・DNp09の出力 → 字幕と動き
+        </p>
+        <p>
+          一度の送信で320
+          msの神経時間を計算します。送信間は計算を休止し、次の送信で同じ状態から続けます。「待って」は目印を消す合図で、残る活動を強制的には止めません。神経配線の学習や主観の推定は行いません。
+        </p>
+        <p>
+          「こっちにおいで」はその時の正面に、「左 /
+          右を見て」はその時の左右に目印を置きます。対応していない文章は送信前に案内します。伝播なしを試す場合はチェックを外して新しいセッションにしてください。
+        </p>
+        <p>
+          旋回とDNa02の関係は<a
+            href="https://www.nature.com/articles/s41586-024-07039-2"
+            >研究</a
+          >を参考にしています。研究がこのアプリの字幕や数値を検証したわけではありません。
+        </p>
+        <a href="./docs/talk-guide.md">通訳のしくみと実験のガイド</a>
+      </section>
+    </main>
+    <script type="module" src="./src/talk-ui.js"></script>
+  </body>
+</html>
