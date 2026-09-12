@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>ハエさんのお絵かき — Fly Music Lab</title>
+    <meta
+      name="description"
+      content="小さな脳の反応から一筆ずつ線を描く。お手本と描画を比較するなぞり描き実験。"
+    />
+    <link rel="icon" href="./public/favicon.svg" />
+    <link rel="stylesheet" href="./src/echo.css" />
+    <link rel="stylesheet" href="./src/draw.css" />
+  </head>
+  <body>
+    <a class="skip" href="#studio">お絵かきへ</a>
+    <header>
+      <a class="brand" href="./"
+        >FLY MUSIC LAB <span>小さな脳のアトリエ</span></a
+      >
+      <nav aria-label="モード">
+        <a href="./">音楽</a
+        ><a href="./draw.html" aria-current="page">お絵かき</a
+        ><a href="#how">しくみ</a>
+      </nav>
+    </header>
+    <main>
+      <section class="heading">
+        <div>
+          <p class="eyebrow">EXPERIMENT 03 / LOOK & DRAW</p>
+          <h1>その線を見て<br />どんな絵を描くだろう</h1>
+        </div>
+        <p>
+          線を見つけて、一筆。<br />小さな脳の反応を絵にしてみる。<br /><span
+            class="fine"
+            >固定の実配線 ＋ 学習するペンの読み出し器</span
+          >
+        </p>
+      </section>
+      <section id="studio" class="studio" aria-label="なぞり描き実験">
+        <aside class="artist">
+          <div class="stage-label">
+            <span>今日の絵描きさん</span
+            ><strong id="artist-state">鉛筆を持って待っています</strong>
+          </div>
+          <canvas
+            id="fly3d"
+            aria-label="鉛筆を持つ3Dのハエ。ドラッグで回転できます"
+          ></canvas
+          ><span id="three-status" class="fine">3Dを準備中</span
+          ><label class="rotate-label"
+            >見る角度<input
+              id="angle"
+              type="range"
+              min="-180"
+              max="180"
+              value="-20"
+          /></label>
+          <p class="fine">身体と鉛筆はペン操作に合わせた演技です</p>
+          <div class="lesson-actions">
+            <button id="train" class="primary">ペンの使い方を練習</button
+            ><button id="cancel" disabled>止める</button>
+          </div>
+          <p id="learned">まず丸・三角・波線の局所的な見え方を練習します</p>
+          <p id="status" role="status" aria-live="polite">
+            お手本を選んで練習をはじめてください
+          </p>
+          <p id="error" role="alert"></p>
+        </aside>
+        <div class="drawing-desk">
+          <div class="paper-toolbar">
+            <label
+              >お手本<select id="shape">
+                <option value="circle">丸</option>
+                <option value="triangle">三角</option>
+                <option value="wave">波線</option>
+                <option value="star">星（未練習）</option>
+                <option value="custom">自分で描く</option>
+              </select></label
+            ><button id="clear">描き直す</button
+            ><label
+              >シード<input
+                id="seed"
+                type="number"
+                min="1"
+                max="999999"
+                value="1"
+            /></label>
+          </div>
+          <div class="papers">
+            <figure>
+              <figcaption>あなたのお手本 <span>薄墨の線</span></figcaption>
+              <canvas
+                id="reference"
+                width="512"
+                height="512"
+                tabindex="0"
+                aria-label="お手本。自分で描くを選びドラッグ、または矢印キーで描画、Enterでペンを上げる"
+              ></canvas>
+            </figure>
+            <figure>
+              <figcaption>ハエさんの線 <span>橙色のインク</span></figcaption>
+              <canvas
+                id="drawing"
+                width="512"
+                height="512"
+                aria-label="神経の反応から描いた線"
+              ></canvas>
+            </figure>
+          </div>
+          <p class="fine" id="input-help">
+            緑の点から開始。枠は次の一筆で見る範囲です。最大160筆で終了します
+          </p>
+          <div class="draw-actions">
+            <button id="draw" class="primary" disabled>描いてもらう</button
+            ><button id="compare" disabled>3つの条件を比べる</button>
+          </div>
+          <div class="drawing-metrics">
+            <p>線からの平均距離<strong id="distance">—</strong></p>
+            <p>なぞれた範囲<strong id="coverage">—</strong></p>
+            <p>描画の進み<strong id="steps">0 / 160筆</strong></p>
+          </div>
+          <p class="fine">
+            距離は小さいほど近く、範囲はお手本の6
+            px以内まで線が届いた割合です。絵の意味の理解を測る値ではありません
+          </p>
+        </div>
+      </section>
+      <section class="observation">
+        <div>
+          <h2>いま見えた線</h2>
+          <canvas
+            id="vision"
+            width="256"
+            height="256"
+            aria-label="ペン周囲の局所視野"
+          ></canvas>
+          <p id="sensor-summary" class="fine">
+            描画すると、8方向の人工センサーの強さが見えます
+          </p>
+          <p class="fine">
+            前の向きを使って後ろ向きの入力を抑えます。視覚入力なしの条件では入力はゼロです
+          </p>
+        </div>
+        <div class="brain-panel">
+          <h2>一筆ごとの脳の反応</h2>
+          <div class="reaction-controls">
+            <label>見る一筆<select id="reaction-frame" disabled></select></label
+            ><button id="reaction-png" disabled>反応の画像を保存</button>
+          </div>
+          <canvas
+            id="reaction-map"
+            aria-label="計算した発火を実際の細胞体位置に重ねた反応図"
+          ></canvas>
+          <p id="reaction-summary" class="fine" aria-live="polite">
+            描画すると反応が現れます
+          </p>
+          <p class="fine">
+            橙色は計算上の発火。背景は位置情報を約1/20に間引き、位置のある発火細胞を上位500個まで表示します。計算には全配線を使用します
+          </p>
+        </div>
+      </section>
+      <section class="drawing-results">
+        <h2>条件を変えて比べる</h2>
+        <p>同じお手本・開始位置・シードで比較します。学習は共通です</p>
+        <div id="comparisons">
+          <p class="fine">
+            「3つの条件を比べる」で通常・伝播なし・視覚入力なしを計算します
+          </p>
+        </div>
+      </section>
+      <section class="save-section">
+        <div>
+          <h2>今日の線を残す</h2>
+          <p>
+            PNGはハエさんの線だけ。実験JSONにはお手本、条件、神経特徴、ペン操作を含みます
+          </p>
+          <div class="draw-actions">
+            <button id="png" disabled>絵をPNGで保存</button
+            ><button id="json" disabled>実験JSON</button>
+          </div>
+        </div>
+        <div>
+          <h2>またここから描く</h2>
+          <p>学習はこのブラウザへ自動保存。ノートで別の端末へ移せます</p>
+          <div class="draw-actions">
+            <button id="note" disabled>ノートを書き出す</button
+            ><button id="import-button" type="button">ノートを読み込む</button
+            ><input
+              id="import"
+              type="file"
+              accept="application/json,.json"
+              hidden
+            />
+          </div>
+          <p id="storage" class="fine">音楽の学習ノートとは別に保存します</p>
+        </div>
+      </section>
+      <section id="how" class="draw-guide">
+        <h2>線が生まれるまで</h2>
+        <p class="flow">
+          周りの線を見る → 人工的な視覚入力 → 全配線の神経反応 →
+          学習したペン操作 → 動いた先でもう一度見る
+        </p>
+        <p>
+          学習するのは追加の読み出し器です。視覚注釈のあるLC4・LC6・LC9・LC11・LC12・LC15・LC16・LC17を人工的な8入力群に割り当て、毎回の観測を初期状態から20
+          ms計算します。実物のハエの視覚やお絵かき能力の再現ではありません。最初の位置と向きはお手本から与えますが、その後のペン操作を決める読み出し器には神経状態だけを渡します。
+        </p>
+        <p>
+          練習した形でも線を外したり、途中で止まったりします。丸と星、自分の線、別のシードを比べてみてください。神経特徴がゼロのときはペンを上げる規則があります。
+        </p>
+        <a href="./docs/drawing-guide.md">入力・学習・対照実験の詳しいガイド</a>
+      </section>
+    </main>
+    <script type="module" src="./src/draw-ui.js"></script>
+  </body>
+</html>

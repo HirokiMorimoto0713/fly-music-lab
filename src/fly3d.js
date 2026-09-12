@@ -1,7 +1,7 @@
 import * as T from "../node_modules/three/build/three.module.js";
-// 独自の立体イラスト。身体の演技は再生中の音に同期し、生理の再現とは区別する。
+// 独自の立体イラスト。身体の演技は音の再生や描画操作に同期し、生理の再現とは区別する。
 export class HeadphoneFly {
-  constructor(canvas) {
+  constructor(canvas, { drawing = false } = {}) {
     this.canvas = canvas;
     this.level = 0;
     this.mode = "idle";
@@ -96,6 +96,36 @@ export class HeadphoneFly {
       band.push([Math.cos(a) * 0.58, Math.sin(a) * 0.64, 0]);
     }
     line(this.head, band, 0.067, orange);
+    if (drawing) {
+      this.pencil = new T.Group();
+      this.pencil.position.set(0.58, 0.66, 0.94);
+      this.pencil.rotation.z = -0.3;
+      this.fly.add(this.pencil);
+      const shaft = new T.Mesh(
+        new T.CylinderGeometry(0.065, 0.065, 0.92, 6),
+        orange,
+      );
+      shaft.castShadow = true;
+      this.pencil.add(shaft);
+      const tip = new T.Mesh(new T.ConeGeometry(0.064, 0.22, 6), dark);
+      tip.rotation.z = Math.PI;
+      tip.position.y = -0.57;
+      this.pencil.add(tip);
+      line(
+        this.fly,
+        [
+          [0.25, 1.15, 0.35],
+          [0.45, 0.8, 0.85],
+          [0.58, 0.7, 0.94],
+        ],
+        0.038,
+        dark,
+      );
+      const sheet = new T.Mesh(new T.BoxGeometry(1.4, 0.025, 1.15), cream);
+      sheet.position.set(0.3, 0.07, 0.75);
+      sheet.receiveShadow = true;
+      this.scene.add(sheet);
+    }
     this.mouth = ell(this.head, pad, [0, -0.2, 0.38], [0.06, 0.04, 0.04]);
     this.wings = [];
     const wingmat = new T.MeshPhysicalMaterial({
@@ -168,7 +198,11 @@ export class HeadphoneFly {
     );
     this.reduce = matchMedia("(prefers-reduced-motion: reduce)");
     this.animate = (t) => {
-      if (!document.hidden && this.visible && (this.level > 0 || this.wasActive)) {
+      if (
+        !document.hidden &&
+        this.visible &&
+        (this.level > 0 || this.wasActive)
+      ) {
         const l = this.reduce.matches ? 0 : this.level;
         this.head.rotation.z = Math.sin(t / 160) * l * 0.09;
         this.mouth.scale.y = this.mode === "answer" ? 0.04 + l * 0.09 : 0.04;
@@ -203,6 +237,13 @@ export class HeadphoneFly {
   draw() {
     this.fly.rotation.y = this.angle;
     this.renderer.render(this.scene, this.camera);
+  }
+  setStroke(pose, down) {
+    if (!this.pencil || this.reduce.matches) return;
+    this.pencil.position.y = down ? 0.66 : 0.86;
+    this.pencil.rotation.x = down ? Math.sin(pose.heading) * 0.18 : 0;
+    this.head.rotation.x = down ? 0.12 : 0;
+    this.draw();
   }
   set(mode, level = 0) {
     this.mode = mode;

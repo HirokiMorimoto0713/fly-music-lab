@@ -32,7 +32,8 @@ export function reactionSnapshot(neurons, counts, steps) {
   };
 }
 export class ReactionView {
-  constructor(canvas) {
+  constructor(canvas, options = {}) {
+    this.options = options;
     this.canvas = canvas;
     this.frames = [];
     this.anatomy = [];
@@ -82,8 +83,11 @@ export class ReactionView {
     this.frames.forEach((f, i) => {
       const o = document.createElement("option");
       o.value = i;
-      o.textContent =
-        f.phase === "silent" ? "音が止まったあと" : `${i + 1}音目を入力中`;
+      o.textContent = this.options.labelFrame
+        ? this.options.labelFrame(f, i)
+        : f.phase === "silent"
+          ? "音が止まったあと"
+          : `${i + 1}音目を入力中`;
       this.selector.append(o);
     });
     this.selector.value = this.selected;
@@ -109,7 +113,12 @@ export class ReactionView {
     canvas.dataset.active = frame?.reaction?.active ?? 0;
     if (!this.anatomy.length) {
       c.fillStyle = "#b3c2ac";
-      c.fillText("練習か返事の計算で、実際の反応がここに現れます", 16, 170);
+      c.fillText(
+        this.options.emptyText ||
+          "練習か返事の計算で、実際の反応がここに現れます",
+        16,
+        170,
+      );
       return;
     }
     const points = this.anatomy;
@@ -148,7 +157,7 @@ export class ReactionView {
     c.fillText(this.label || "神経反応", 16, 284, w - 32);
     if (frame) {
       c.fillText(
-        `${frame.phase === "silent" ? "入力停止後" : "音符入力中"} ${frame.reaction.durationMs} ms · ${frame.spikes.toLocaleString()}発火`,
+        `${this.options.phaseName || (frame.phase === "silent" ? "入力停止後" : "音符入力中")} ${frame.reaction.durationMs} ms · ${frame.spikes.toLocaleString()}発火`,
         16,
         305,
       );
@@ -162,7 +171,7 @@ export class ReactionView {
     }
     const summary = document.getElementById("reaction-summary");
     summary.textContent = frame
-      ? `${this.label} — ${frame.phase === "silent" ? "音が止まったあと" : "音符入力中"}の${frame.reaction.durationMs} msに${frame.spikes.toLocaleString()}回発火。${frame.reaction.active}細胞が活動しました。`
+      ? `${this.label} — ${this.options.phaseName || (frame.phase === "silent" ? "音が止まったあと" : "音符入力中")}の${frame.reaction.durationMs} msに${frame.spikes.toLocaleString()}回発火。${frame.reaction.active}細胞が活動しました。`
       : "配線を読み込みました。反応を待っています";
   }
 }

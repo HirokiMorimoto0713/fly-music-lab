@@ -1,0 +1,315 @@
+.heading {
+  padding-top: 30px;
+  padding-bottom: 34px;
+}
+.heading h1 {
+  font-size: clamp(28px, 3.6vw, 46px);
+}
+.studio {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.72fr) minmax(0, 1.8fr);
+  gap: 30px;
+  border-top: 1px solid var(--line);
+  padding: 24px 0 32px;
+}
+.artist {
+  min-width: 0;
+}
+.artist #fly3d {
+  width: 100%;
+  height: 270px;
+  display: block;
+  border-radius: 5px;
+}
+.stage-label {
+  font-size: 11px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.artist p {
+  margin: 10px 0;
+}
+.lesson-actions,
+.draw-actions,
+.paper-toolbar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.lesson-actions {
+  margin-top: 16px;
+}
+.paper-toolbar {
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.paper-toolbar label {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.paper-toolbar input {
+  width: 84px;
+}
+.papers {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+figure {
+  margin: 0;
+}
+figcaption {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 500;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+figcaption span {
+  font-size: 10px;
+  color: var(--muted);
+}
+.papers canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: 2px 4px 0 #e5e4d9;
+  touch-action: none;
+}
+#reference {
+  cursor: crosshair;
+}
+.drawing-desk {
+  min-width: 0;
+}
+.drawing-metrics {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--line);
+  margin-top: 16px;
+}
+.drawing-metrics p {
+  font-size: 11px;
+  margin: 0 0 12px;
+}
+.drawing-metrics strong {
+  display: block;
+  font:
+    22px "DM Mono",
+    monospace;
+  margin-top: 6px;
+}
+.observation {
+  display: grid;
+  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.8fr);
+  gap: 30px;
+  padding: 24px 0;
+  border-top: 1px solid var(--line);
+}
+.observation h2 {
+  margin: 0 0 14px;
+  font-size: 21px;
+}
+.observation #vision {
+  width: 180px;
+  height: 180px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+#reaction-map {
+  display: block;
+  width: 100%;
+  height: 340px;
+  border-radius: 4px;
+}
+.reaction-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.reaction-controls label {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.drawing-results,
+.save-section,
+.draw-guide {
+  padding: 28px 0;
+  border-top: 1px solid var(--line);
+}
+#comparisons {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+#comparisons button {
+  white-space: normal;
+  text-align: left;
+  min-width: 180px;
+  flex: 1;
+}
+#comparisons strong,
+#comparisons span {
+  display: block;
+}
+#comparisons span {
+  font-size: 12px;
+}
+#comparisons button[aria-pressed="true"] {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.save-section {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 30px;
+}
+.draw-guide {
+  max-width: 850px;
+  padding-bottom: 60px;
+}
+.flow {
+  font-size: 17px;
+  font-family: "Noto Serif JP", serif;
+}
+.brain-panel {
+  min-width: 0;
+}
+#error {
+  color: var(--accent);
+  min-height: 1.6em;
+}
+.draw-guide h2,
+.save-section h2,
+.drawing-results h2 {
+  font-family: "Noto Serif JP", serif;
+  font-weight: 500;
+}
+#learned {
+  font-size: 12px;
+}
+#status {
+  font-size: 13px;
+}
+.file-button:has(input:disabled) {
+  border-style: dashed;
+  cursor: default;
+  color: var(--muted);
+}
+@media (max-width: 800px) {
+  .studio,
+  .observation {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .artist {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 8px 16px;
+  }
+  .artist .stage-label {
+    grid-column: 1/-1;
+  }
+  .artist #fly3d {
+    grid-row: 2/7;
+    height: 240px;
+  }
+  .artist #error {
+    grid-column: 1/-1;
+  }
+  .save-section {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .observation #vision {
+    width: 160px;
+    height: 160px;
+  }
+  .heading {
+    padding-top: 24px;
+  }
+  .papers {
+    gap: 10px;
+  }
+  .paper-toolbar {
+    justify-content: flex-start;
+  }
+  nav {
+    gap: 12px;
+  }
+  .brand span {
+    display: none;
+  }
+}
+@media (max-width: 450px) {
+  header,
+  main {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .artist {
+    display: block;
+  }
+  .artist #fly3d {
+    height: 220px;
+  }
+  .papers {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .drawing-metrics {
+    gap: 16px;
+  }
+  .heading h1 {
+    font-size: 29px;
+  }
+  .brand {
+    font-size: 12px;
+  }
+  nav {
+    font-size: 12px;
+  }
+  .paper-toolbar label {
+    font-size: 12px;
+  }
+  figcaption span {
+    font-size: 11px;
+  }
+  .reaction-controls {
+    gap: 8px;
+  }
+  .reaction-controls select {
+    max-width: 150px;
+  }
+}
+.papers figure {
+  width: 100%;
+  max-width: 320px;
+}
+.papers {
+  justify-items: center;
+}
+#error:empty {
+  border-color: transparent;
+}
+@media (min-width: 801px) {
+  .artist #fly3d {
+    height: 230px;
+  }
+  .heading {
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
+  .heading h1 {
+    font-size: 40px;
+  }
+}
+
+#import {
+  display: none;
+}
