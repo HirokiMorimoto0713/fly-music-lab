@@ -138,3 +138,24 @@ npm testの11件が合格。会話の実配線テストでは、DNa02の左右�
 最終追加チェックで、入力欄へ実際に日本語を入力してEnterで送信し、保存JSONにデータ版・読み出し神経ID・元の文章があることを確認しました。音楽・お絵かきのナビゲーション追加後も320pxで横はみ出しなし。最終PC画面とスマホの入力欄を目視確認。talk.htmlと会話ガイドはHTTP 200、既存fly-music-lab.serviceはactive。今回Mac実機やSafariでの動作は未確認です。
 
 結果はartifacts/talk-model-results.json、artifacts/talk-final-export.json、画面はdocs/talk-preview.png。機能は人工的な視覚前処理と字幕規則を含み、自然な日本語理解・意識・欲求の読み取り・学習を検証したものではありません。
+
+## 公開版の確認（2026-09-17）
+
+[GitHubリポジトリ](https://github.com/HirokiMorimoto0713/fly-music-lab)をPublicへ変更し、[GitHub Pagesのアプリ](https://hirokimorimoto0713.github.io/fly-music-lab/)を公開しました。上記の「公開未実施」は当時の記録です。
+
+実装コミット `3a035e4` の [Actions実行](https://github.com/HirokiMorimoto0713/fly-music-lab/actions/runs/35191644333) で、依存と固定版の配線データを新規取得し、来歴の一致、11件の自動テスト、配信が成功しました。ログインしていないHTTPクライアントでもGitHubとアプリにアクセスできます。HTTPS必須を確認しています。
+
+配信された全73ファイルのSHA-256がローカル成果物と一致しました。約79 MBの28個の圧縮配線データも含みます。`deployment.json` にコミットとファイル一覧を記録しています。開発用サーバー、テスト、作業記録、Git管理ディレクトリなどの代表6経路はアプリの公開URLでは404です。
+
+公開URLを `LAB_URL` に指定し、PC版Chromeで以下がすべて合格しました。
+
+| 検証 | 確認内容 |
+| --- | --- |
+| `tests/echo-browser.mjs` | 3D、学習、返事、対照条件、MIDI/WAV/JSON/ノート、復元、中断、欠損データ復旧、3Dなし |
+| `tests/draw-browser.mjs` | 3D、学習、波線の描画、一筆履歴、PNG/JSON/ノート、復元、対照、自作線、欠損データ復旧、3Dなし |
+| `tests/talk-browser.mjs` | 対応語句、神経出力の字幕、状態継続、JSON、休止再開、伝播なし、欠損データ復旧、3Dなし |
+| `tests/browser.mjs` | 自由演奏、WAV/MIDI/JSON、同条件の再現、対照、保存と復元、欠損データ復旧 |
+
+各画面で320 / 390 / 768 / 1280pxの横はみ出しなし、pageerrorは0件。公開版の描画結果・会話の字幕・メロディー画面を目視しました。実機で聞こえる音質やMac/Safariの動作は、今回も未確認です。
+
+結果とスクリーンショットはGit対象外の `artifacts/` に保存しています。運用手順は [公開と更新](publishing.md) を参照してください。
