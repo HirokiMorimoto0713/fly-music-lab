@@ -1,6 +1,10 @@
 # Fly Music Lab
 
-「ハエの脳は音楽を理解できるか？」をテーマに、短いメロディーを入力して歌い返せるかを調べる日本語のローカルアプリです。ヘッドフォンをつけた3Dのハエと、お手本・返事の音符比較を使って実験できます。
+「ハエの脳は音楽を理解できるか？」をテーマに、短いメロディーを入力して歌い返せるかを調べる日本語のブラウザアプリです。ヘッドフォンをつけた3Dのハエと、お手本・返事の音符比較を使って実験できます。
+
+**[アプリを開く](https://hirokimorimoto0713.github.io/fly-music-lab/)** · [お絵かき](https://hirokimorimoto0713.github.io/fly-music-lab/draw.html) · [会話](https://hirokimorimoto0713.github.io/fly-music-lab/talk.html) · [自由演奏](https://hirokimorimoto0713.github.io/fly-music-lab/free.html)
+
+インストールやログインなしで使えます。PC版Chromeを推奨します。実験開始時に約79 MBの配線データを読み込み、数百MB以上のメモリを使います。神経計算や学習は使っている端末のブラウザ内で実行します。お手本や会話の内容をサーバーへ送信する機能はありません。
 
 お絵かき実験も追加しました。`/draw.html` で、丸・三角・波線や自作線を見せて、鉛筆を持つ3Dハエのなぞり描きを試せます。[お絵かきの実習ガイド](docs/drawing-guide.md) に操作と仕組みをまとめています。
 
@@ -8,7 +12,7 @@
 
 ![ヘッドフォンをつけた3Dハエとメロディー実験画面](docs/echo-preview.png)
 
-## 起動
+## 手元で起動する
 
 Node.js 22以降、Python 3、PC版Chromeを推奨。Three.jsの依存を固定版でインストールします。
 
@@ -28,7 +32,7 @@ Macから母艦にSSHする場合、Macのターミナルで以下を実行し�
 ssh -N -L 14389:127.0.0.1:4389 motoha@母艦のSSH接続先
 ```
 
-サーバーは127.0.0.1にのみ接続します。ローカルアプリとして構築しており、公開サービスへのデプロイはしていません。ブラウザには全配線を展開するため数百MB以上の空きメモリが必要です。データ取得時以外の実験計算・音声合成・保存はブラウザ内で実行します。Google Fontsが利用できない場合は端末のフォントへフォールバックします。
+手元で起動するサーバーは127.0.0.1にのみ接続します。公開版はGitHub Pagesで静的ファイルを配信します。Google Fontsが利用できない場合は端末のフォントへフォールバックします。ブラウザの保存領域はURLごとに別なので、ローカル版の学習ノートを公開版で使う場合は、ノートを書き出して読み込んでください。
 
 ## メロディー実験
 
@@ -69,7 +73,7 @@ ssh -N -L 14389:127.0.0.1:4389 motoha@母艦のSSH接続先
 
 ## 実装
 
-ES modules、Web Worker、Web Audio、Three.js、Canvas、Nodeの静的サーバー。ビルド処理、APIキー、AIモデルAPI、DBは不要です。全神経をCPUで計算し、本文や生成データを外部サービスへ送信しません。
+ES modules、Web Worker、Web Audio、Three.js、Canvas、Nodeの静的サーバー。APIキー、AIモデルAPI、DBは不要です。全神経をCPUで計算し、本文や生成データを外部サービスへ送信しません。公開用のファイル構成は `npm run build:pages` で準備できます。
 
 メロディー実験の計算は `src/echo-model.js`、画面操作は `src/echo-ui.js`、3Dは `src/fly3d.js`。自由演奏の変換は `src/mapping.js`。共通のLIF実装は `vendor/brain.js` です。最初に読むなら実習ガイドから進めてください。
 
@@ -80,6 +84,12 @@ npm test
 ```
 
 実データの準備が必須です。全配線、再現性、伝播対照、無刺激、JSON検証、WAV/MIDI形式を確認します。ブラウザE2Eは `tests/browser.mjs` を参照してください。
+
+## 公開と更新
+
+`main` へのpushでGitHub Actionsが依存と版固定の配線データを取得し、来歴とテストを確認してからGitHub Pagesへ配信します。配信対象はアプリ、ガイド、配線データ、必要なThree.jsファイルとライセンスです。配信した版と各ファイルのSHA-256は `deployment.json` で確認できます。
+
+運用手順と公開確認は [公開ガイド](docs/publishing.md) を参照してください。
 
 ## 出典とライセンス
 

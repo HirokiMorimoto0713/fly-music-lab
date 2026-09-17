@@ -20,7 +20,7 @@ const idle = () =>
     null,
     { timeout: 180000 },
   );
-const base = "http://127.0.0.1:4389";
+const base = (process.env.LAB_URL || "http://127.0.0.1:4389").replace(/\/$/, "");
 try {
   await page.goto(base + "/talk.html");
   await page.waitForFunction(() => window.talkDiagnostics?.three === true);

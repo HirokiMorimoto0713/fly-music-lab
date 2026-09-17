@@ -19,7 +19,7 @@ const errors = [];
 page.on("pageerror", (e) => errors.push(e.message));
 const root = new URL("../artifacts/", import.meta.url);
 await fs.mkdir(root, { recursive: true });
-const base = "http://127.0.0.1:4389";
+const base = (process.env.LAB_URL || "http://127.0.0.1:4389").replace(/\/$/, "");
 const idle = () =>
   page.waitForFunction(
     () => window.echoDiagnostics && !window.echoDiagnostics.busy,

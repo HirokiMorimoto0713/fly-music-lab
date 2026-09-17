@@ -12,7 +12,7 @@ const page = await browser.newPage({
   viewport: { width: 1280, height: 900 },
   acceptDownloads: true,
 });
-const base = "http://127.0.0.1:4389",
+const base = (process.env.LAB_URL || "http://127.0.0.1:4389").replace(/\/$/, ""),
   root = new URL("../artifacts/", import.meta.url);
 await fs.mkdir(root, { recursive: true });
 const errors = [];
