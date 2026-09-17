@@ -50,6 +50,10 @@ header {
 nav {
   display: flex;
   gap: 22px;
+  flex-wrap: wrap;
+}
+nav a {
+  white-space: nowrap;
 }
 a {
   color: inherit;
@@ -586,6 +590,15 @@ footer {
   * {
     scroll-behavior: auto !important;
     transition: none !important;
+  }
+}
+@media (max-width: 600px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding-top: 14px;
+    padding-bottom: 14px;
   }
 }
 

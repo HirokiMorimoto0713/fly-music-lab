@@ -1,4 +1,7 @@
 public/data/*.gz
+public/embodied/assets/
+public/embodied/runtime/
+docs/session-brief.md
 artifacts/
 node_modules/
 __pycache__/

@@ -2,7 +2,7 @@
 
 「ハエの脳は音楽を理解できるか？」をテーマに、短いメロディーを入力して歌い返せるかを調べる日本語のブラウザアプリです。ヘッドフォンをつけた3Dのハエと、お手本・返事の音符比較を使って実験できます。
 
-**[アプリを開く](https://hirokimorimoto0713.github.io/fly-music-lab/)** · [お絵かき](https://hirokimorimoto0713.github.io/fly-music-lab/draw.html) · [会話](https://hirokimorimoto0713.github.io/fly-music-lab/talk.html) · [自由演奏](https://hirokimorimoto0713.github.io/fly-music-lab/free.html)
+**[アプリを開く](https://hirokimorimoto0713.github.io/fly-music-lab/)** · [お絵かき](https://hirokimorimoto0713.github.io/fly-music-lab/draw.html) · [会話](https://hirokimorimoto0713.github.io/fly-music-lab/talk.html) · [自由演奏](https://hirokimorimoto0713.github.io/fly-music-lab/free.html) · [歩行](https://hirokimorimoto0713.github.io/fly-music-lab/walk.html)
 
 インストールやログインなしで使えます。PC版Chromeを推奨します。実験開始時に約79 MBの配線データを読み込み、数百MB以上のメモリを使います。神経計算や学習は使っている端末のブラウザ内で実行します。お手本や会話の内容をサーバーへ送信する機能はありません。
 
@@ -21,6 +21,7 @@ git clone https://github.com/HirokiMorimoto0713/fly-music-lab.git
 cd fly-music-lab
 npm ci --ignore-scripts
 npm run prepare:data
+npm run prepare:body
 npm start
 ```
 
@@ -33,6 +34,12 @@ ssh -N -L 14389:127.0.0.1:4389 motoha@母艦のSSH接続先
 ```
 
 手元で起動するサーバーは127.0.0.1にのみ接続します。公開版はGitHub Pagesで静的ファイルを配信します。Google Fontsが利用できない場合は端末のフォントへフォールバックします。ブラウザの保存領域はURLごとに別なので、ローカル版の学習ノートを公開版で使う場合は、ノートを書き出して読み込んでください。
+
+## ハエの運動場
+
+`/walk.html` でNeuroMechFlyの身体をMuJoCoで動かせます。前進・左右旋回・指令停止、物理時間の一時停止、0.1秒ずつの計算、6脚の接地・移動・向きの実測、シード指定、JSON保存に対応します。
+
+このページは手動の身体実験で、MaleCNSの脳や飛行は未接続です。身体と制御器など約15 MBを取得し、79 MBの神経データは読み込みません。目標は実時間の0.1倍速です。[歩行のガイド](docs/walking-guide.md) に操作・人工制御の範囲・ライセンスを記載しています。
 
 ## メロディー実験
 

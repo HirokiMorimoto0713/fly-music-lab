@@ -32,27 +32,65 @@ const dataFiles = [
   manifest.metadata,
   ...manifest.arrays.flatMap((array) => array.parts.map((part) => part.file)),
 ];
+const bodyManifest = JSON.parse(
+  await readFile(path.join(root, "public/embodied/manifest.json"), "utf8"),
+);
+if (
+  bodyManifest.files.some(
+    ({ file }) =>
+      !/^(assets\/model\/[\w.-]+\.(xml|stl)|assets\/model_meta\.json|runtime\/(mujoco\/mujoco\.(js|wasm)|three\/three\.module\.js))$/.test(
+        file,
+      ),
+  )
+)
+  throw Error("身体データのファイル名が不正です");
+const bodyHashes = new Map(
+  bodyManifest.files.map((item) => [
+    "public/embodied/" + item.file,
+    item.sha256,
+  ]),
+);
 if (dataFiles.some((file) => !/^[a-zA-Z0-9][a-zA-Z0-9._-]*\.gz$/.test(file))) {
   throw Error("配線データのファイル名が不正です");
 }
 const files = [
-  "index.html",
-  "free.html",
-  "draw.html",
-  "talk.html",
-  "README.md",
-  ...tracked.filter((file) =>
-    /^(src\/[^/]+\.(js|css)|docs\/[^/]+\.(md|png))$/.test(file),
-  ),
-  "public/favicon.svg",
-  "public/data/manifest.json",
-  "public/data/provenance.json",
-  ...dataFiles.map((file) => "public/data/" + file),
-  "vendor/brain.js",
-  "vendor/LICENSE",
-  "node_modules/three/build/three.module.js",
-  "node_modules/three/build/three.core.js",
-  "node_modules/three/LICENSE",
+  ...new Set([
+    "index.html",
+    "free.html",
+    "draw.html",
+    "talk.html",
+    "walk.html",
+    "README.md",
+    ...tracked.filter(
+      (file) =>
+        file !== "docs/session-brief.md" &&
+        /^(src\/[^/]+\.(js|css)|docs\/[^/]+\.(md|png))$/.test(file),
+    ),
+    "src/walk-model.js",
+    "src/walk-view.js",
+    "src/walk-ui.js",
+    "src/walk.css",
+    "docs/walking-guide.md",
+    "public/embodied/manifest.json",
+    ...bodyHashes.keys(),
+    ...[
+      "controller.js",
+      "meshes.js",
+      "NOTICE.md",
+      "LICENSE",
+      "LICENSE-mujoco",
+      "LICENSE-three",
+    ].map((file) => "vendor/neuromechfly/" + file),
+    "public/favicon.svg",
+    "public/data/manifest.json",
+    "public/data/provenance.json",
+    ...dataFiles.map((file) => "public/data/" + file),
+    "vendor/brain.js",
+    "vendor/LICENSE",
+    "node_modules/three/build/three.module.js",
+    "node_modules/three/build/three.core.js",
+    "node_modules/three/LICENSE",
+  ]),
 ];
 const inventory = {};
 for (const file of files) {
@@ -61,6 +99,9 @@ for (const file of files) {
     throw Error("通常ファイル以外は配信しません: " + file);
   const bytes = await readFile(source);
   const sha256 = createHash("sha256").update(bytes).digest("hex");
+  if (bodyHashes.has(file) && sha256 !== bodyHashes.get(file)) {
+    throw Error("身体データの検証に失敗しました: " + file);
+  }
   if (
     file.endsWith(".gz") &&
     sha256 !== provenance.files[path.basename(file)]?.sha256
@@ -93,8 +134,10 @@ await writeFile(
 if (process.env.GITHUB_OUTPUT) {
   await appendFile(process.env.GITHUB_OUTPUT, "path=" + destination + "\n");
 }
-console.log(JSON.stringify({
-  path: destination,
-  files: files.length,
-  bytes: Object.values(inventory).reduce((sum, file) => sum + file.bytes, 0),
-}));
+console.log(
+  JSON.stringify({
+    path: destination,
+    files: files.length,
+    bytes: Object.values(inventory).reduce((sum, file) => sum + file.bytes, 0),
+  }),
+);

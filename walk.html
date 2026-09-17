@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>ハエの運動場 — Fly Music Lab</title>
+    <meta
+      name="description"
+      content="6本の脚で床を押す、小さなハエの物理実験。歩行指令と実際の移動・接地を見比べます。"
+    />
+    <link rel="icon" href="./public/favicon.svg" />
+    <link rel="stylesheet" href="./src/echo.css" />
+    <link rel="stylesheet" href="./src/walk.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "./public/embodied/runtime/three/three.module.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#playground">運動場へ</a>
+    <header>
+      <a class="brand" href="./">FLY MUSIC LAB <span>ハエの運動場</span></a>
+      <nav aria-label="モード">
+        <a href="./">音楽</a><a href="./draw.html">お絵かき</a
+        ><a href="./talk.html">会話</a
+        ><a href="./walk.html" aria-current="page">歩行</a>
+      </nav>
+    </header>
+    <main>
+      <section class="walk-heading">
+        <div>
+          <p class="eyebrow">EXPERIMENT 05 / BODY &amp; GROUND</p>
+          <h1>小さな一歩の<br />しくみを見よう</h1>
+        </div>
+        <p>
+          脚のリズムを変えると、身体はどう動く？<br />床との接触から生まれる歩みを、ゆっくり観察します。<br /><span
+            class="fine"
+            >NeuroMechFlyの身体実験 · 脳モデルはまだ接続していません</span
+          >
+        </p>
+      </section>
+      <section id="playground" class="playground" aria-label="歩行の実験">
+        <div class="body-view">
+          <div class="view-bar">
+            <span>NeuroMechFly / 物理的な身体</span
+            ><button id="view" disabled>真上から見る</button>
+          </div>
+          <div
+            id="stage"
+            role="img"
+            aria-label="MuJoCoで計算したハエの身体と接地点"
+          >
+            <div id="welcome">
+              <span class="stage-mark">6本の脚と、ひとつの身体</span>
+              <p>身体を読み込むと、ここに運動場が現れます</p>
+              <button id="load" class="primary">身体を読み込む</button>
+              <p class="fine">初回 約15 MB · PC版Chrome推奨</p>
+            </div>
+          </div>
+          <div class="view-caption">
+            <span>床の目盛り 1 mm · 点は床との接触位置</span
+            ><span id="performance">計算前</span>
+          </div>
+        </div>
+        <aside class="walk-controls" aria-label="歩行指令">
+          <p class="eyebrow">手動で試す</p>
+          <h2>歩く方向を選ぶ</h2>
+          <p class="fine">
+            選んだ指令が続きます。<br />「歩行指令を止める」で脚の振幅をゼロへ戻します。
+          </p>
+          <div class="directions">
+            <button data-command="forward" disabled aria-pressed="false">
+              ↑ 前へ
+            </button>
+            <button data-command="left" disabled aria-pressed="false">
+              ← 左へ
+            </button>
+            <button data-command="right" disabled aria-pressed="false">
+              右へ →
+            </button>
+            <button data-command="stop" disabled aria-pressed="true">
+              歩行指令を止める
+            </button>
+          </div>
+          <p id="command" class="command-label">指令なし / 左 0.0 · 右 0.0</p>
+          <div class="walk-actions">
+            <button id="run" class="primary" disabled>計算を始める</button
+            ><button id="step" disabled>0.1秒進める</button>
+          </div>
+          <p id="status" role="status">
+            身体を読み込んでから、前へを選んでみてください
+          </p>
+          <p id="error" role="alert" hidden></p>
+          <div class="reset-line">
+            <label for="seed">初期状態のシード</label
+            ><input
+              id="seed"
+              type="number"
+              min="1"
+              max="999999"
+              value="1"
+            /><button id="reset" disabled>初めから</button>
+          </div>
+          <button id="export" disabled>指令と動きを保存</button>
+          <p class="fine key-help">
+            W 前へ / A 左へ / D 右へ / Q 指令停止<br />Space
+            計算の一時停止・再開<br />キー操作は運動場内で使えます
+          </p>
+        </aside>
+      </section>
+      <section class="measurements" aria-label="身体の実測値">
+        <dl class="body-metrics">
+          <div>
+            <dt>物理時間</dt>
+            <dd><span id="time">0.000</span><small> s</small></dd>
+          </div>
+          <div>
+            <dt>開始位置からの距離</dt>
+            <dd><span id="displacement">0.00</span><small> mm</small></dd>
+          </div>
+          <div>
+            <dt>身体の向き</dt>
+            <dd><span id="yaw">0.0</span><small> °</small></dd>
+          </div>
+          <div>
+            <dt>胸部の高さ</dt>
+            <dd><span id="height">—</span><small> mm</small></dd>
+          </div>
+        </dl>
+        <div class="feet">
+          <h2>脚と床の接触</h2>
+          <div id="contacts" aria-label="6本の脚の接触数"></div>
+          <p class="fine">表示は接触点の数です。押す力の大きさではありません</p>
+        </div>
+      </section>
+      <section class="walk-explanation">
+        <div>
+          <h2>指令から、一歩になるまで</h2>
+          <p class="signal-path">
+            左右の指令 → 脚のリズムと関節角 → 床との接触 → 身体の移動
+          </p>
+          <p>
+            脚のリズムはCPGという発振器が作り、用意された脚の軌道をたどります。身体の動きはMuJoCoが計算します。この段階では、ハエの脳が歩き方を学んだものではありません。
+          </p>
+        </div>
+        <div>
+          <h2>止めて見比べる</h2>
+          <p>
+            「歩行指令を止める」は脚の指令をゼロにします。重力や慣性による動きは続きます。「一時停止」は物理時間そのものを止めます。
+          </p>
+          <p>
+            目標は実時間の0.1倍速。30秒の物理時間で自動休止します。同じシードと物理時刻ごとの指令で比較できるよう、20
+            msごとの状態と指令をJSONへ保存できます。
+          </p>
+          <a href="./docs/walking-guide.md">しくみ・出典・実験のガイド</a>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="./src/walk-ui.js"></script>
+  </body>
+</html>

@@ -26,6 +26,7 @@ jobs:
           cache: npm
       - run: npm ci --ignore-scripts
       - run: npm run prepare:data
+      - run: npm run prepare:body
       - name: Verify pinned data provenance
         run: git diff --exit-code -- public/data/manifest.json public/data/provenance.json
       - run: npm test
