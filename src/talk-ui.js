@@ -16,7 +16,7 @@ let worker = null,
 const reaction = new ReactionView($("reaction-map"), {
   labelFrame: (f) => `${f.step}区間目 / ${f.output.text}`,
   phaseName: "視覚入力",
-  emptyText: "話しかけると、反応がここに現れます",
+  emptyText: "話しかけると反応がここに現れます",
 });
 window.talkDiagnostics = { busy: false, loaded: false, records };
 function sync() {

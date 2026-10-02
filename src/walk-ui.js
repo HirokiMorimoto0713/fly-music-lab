@@ -108,7 +108,7 @@ $("load").onclick = async () => {
     );
     $("welcome").hidden = true;
     fault = false;
-    $("status").textContent = "前へを選び、計算を始めてください";
+    $("status").textContent = "前へを選んで計算を始めてください";
     controls();
     render();
   } catch (error) {
