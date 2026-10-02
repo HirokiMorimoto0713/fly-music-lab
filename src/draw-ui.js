@@ -25,7 +25,7 @@ const reaction = new ReactionView($("reaction-map"), {
   labelFrame: (f) =>
     `${f.step}筆目 / ${f.action.down ? "ペンを下ろす" : "ペンを上げる"}`,
   phaseName: "周囲を観測",
-  emptyText: "描いてもらうと、実際の反応がここに現れます",
+  emptyText: "描いてもらうと実際の反応がここに現れます",
 });
 window.drawDiagnostics = { busy: false, model: false };
 function valid() {
