@@ -7,6 +7,7 @@ import {
   mkdir,
   mkdtemp,
   readFile,
+  readdir,
   writeFile,
 } from "node:fs/promises";
 import path from "node:path";
@@ -61,6 +62,7 @@ const files = [
     "talk.html",
     "walk.html",
     "README.md",
+    ...(await readdir(path.join(root, "fonts/zen-kaku-gothic-new"))).filter((file) => /^(?:[a-f0-9]{24}\.woff2|fonts\.css|OFL\.txt)$/.test(file)).map((file) => "fonts/zen-kaku-gothic-new/" + file),
     ...tracked.filter(
       (file) =>
         file !== "docs/session-brief.md" &&

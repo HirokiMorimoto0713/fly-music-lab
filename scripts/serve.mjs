@@ -11,6 +11,8 @@ const types = {
   ".svg": "image/svg+xml",
   ".gz": "application/octet-stream",
   ".wasm": "application/wasm",
+  ".woff2": "font/woff2",
+  ".txt": "text/plain; charset=utf-8",
   ".md": "text/plain; charset=utf-8",
 };
 const port = Number(process.env.PORT || 4389);

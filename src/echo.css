@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600&family=DM+Mono&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;600&family=DM+Mono&display=swap");
 :root {
   --paper: #f3f0e7;
   --surface: #fbfaf5;
@@ -16,7 +16,7 @@ body {
   background: var(--paper);
   color: var(--ink);
   font:
-    14px/1.8 "Noto Sans JP",
+    14px/1.8 "Zen Kaku Gothic New",
     sans-serif;
 }
 header,
@@ -42,7 +42,7 @@ header {
 }
 .brand span {
   font:
-    11px "Noto Sans JP",
+    11px "Zen Kaku Gothic New",
     sans-serif;
   margin-left: 18px;
   color: var(--muted);

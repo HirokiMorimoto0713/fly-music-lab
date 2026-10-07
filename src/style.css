@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Serif+JP:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Serif+JP:wght@400;500&display=swap");
 :root {
   --paper: #f3f0e7;
   --white: #fbfaf5;
@@ -10,7 +10,7 @@
   --soft: #e9eadf;
   --dark: #25342f;
   --mono: "DM Mono", monospace;
-  --body: "Noto Sans JP", sans-serif;
+  --body: "Zen Kaku Gothic New", sans-serif;
   --serif: "Noto Serif JP", serif;
   color-scheme: light;
 }
